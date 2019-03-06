@@ -1,28 +1,41 @@
-﻿using System.Collections;
+﻿/*
+*	Copyright (c) NromaGames
+*	Developer Sazonov Vladimir (Emilio) 
+*	Email : futureNroma@yandex.ru
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using GoogleMobileAds.Api;
 
+/// <summary>
+/// Move pieces of materials.
+/// </summary>
 public class RunGame : MonoBehaviour {
-    DataPlayer dataPlayer;                                   //data from file data
-    DataPlayer dataPlayerOnScript;                           //data from script while game running
-    float deltaTime;
 
-    [SerializeField] private Text textScoreBlockBlack;
+	// Temporary data for using in script
+	private DataPlayer _temporaryDataPlayer;
+	// Set link of data player from dataplayermanager
+	private DataPlayer _dataPlayer = DataplayerManager.Instance.Data;
+	// The time between updates
+	private float _deltaTime;
+	// Text of score in the bottom of game
+    [SerializeField] private Text _textScoreBlockBlack;
+	// All animals in the game
+	[SerializeField] private List<GameObject> players;
 
-    [SerializeField] private List<GameObject> players;       //all animals in the game
-    
-    #region locations and their values
-    const short countLoc = 2;                                //saying how many locations in the game
-
-    [SerializeField] private float speed;                   //speed game
-
-    [SerializeField] private GameObject emptyObj;            //empty object for create empty material on area
-
-    [SerializeField] private List<GameObject> coins;         //gold coin, sliver coin and etc
-
-    [SerializeField] private List<int> colorLocation;       //R G B A color backround of each location
+	#region locations and their values
+	// Count of locations in the game
+	const short _countLoc = 2;                                
+	// Speed of player.
+    [SerializeField] private float _speed;                   
+	// Empty object for create empty material on area
+    [SerializeField] private GameObject _emptyObj;
+	// Gold coin, sliver coin and etc
+	[SerializeField] private List<GameObject> _coins;         
+	//R G B A color backround of each location
+    [SerializeField] private List<int> _colorLocation;       
 
     //if add location ADD case to 
     //method inputAreasListsToGeneralList
@@ -33,53 +46,63 @@ public class RunGame : MonoBehaviour {
     [SerializeField] private List<GameObject> matDanLoc2;                           
     [SerializeField] private List<GameObject> matSafLoc2;
 
-    private int score;                                     //get score from start to gameOver                     
-    static public int CountMoney { get; set; }             //get money from start to gameOver
-    private int currentPlayer;                                //get the player that choose
+	// Score from start game to game over  
+	private int _score;
+	// Count of money from start to gameOver
+	static public int CountMoney { get; set; }
+	// Skin that user choosed
+	private int _currentPlayer;
 
-    static public bool isGameOver { get; set; }              // get the value from another script if it necessery to stop the game
-    static public bool isPause { get; set; }                 // get the value from another script if it necessery to stop the game
-    private bool isSave;    //if the file was save it true
+    static public bool isGameOver { get; set; }             
+    static public bool isPause { get; set; }      
+	// True if the file alreday saved
+    private bool _isSave;
 
-    //all locations area and materials in one 
+    // All locations area and materials in one 
     private List<List<GameObject>> areasLoc;
     private List<List<GameObject>> matDanLoc;
     private List<List<GameObject>> matSafLoc;
 
-    private List<GameObject> piecesAreas = new List<GameObject>();          //List of pieces areas in the game
-    private List<GameObject> piecesMaterials = new List<GameObject>();      //List of pieces materials in the game
+	//List of pieces areas in the game
+	private List<GameObject> piecesAreas = new List<GameObject>();
+	//List of pieces materials in the game
+	private List<GameObject> piecesMaterials = new List<GameObject>();
 
-    //private GameObject area;                                                //one piece of area
-    private GameObject material;                                            //one piece of material
-    private GameObject player;                                              //player on game
+	// Piece of material
+	private GameObject _material;
+	//player on game.
+	private GameObject _player;
 
-    private Vector2 posClear;                                               //position without dangerous elements
-    private Vector3 pos;                                                    //position of one piece
-    private short location;                                                 //number of location in current score
-    private bool[] pieceColumn = new bool[5];                               //five last pieces that have to deleted, false - are not deleted yet
+	// Position without dangerous elements
+	private Vector2 _posClear;
+	// Position of one piece
+	private Vector3 _pos;
+	// Number of location in current score
+	private short _location;
+	// Five last pieces that have to deleted, false - are not deleted yet
+	private bool[] _pieceColumn = new bool[5];                               
     #endregion
 
     void Start()
     {
         isPause = false;
         isGameOver = false;
-        isSave = false;
+        _isSave = false;
 
-        //load data player from file and set it to another object to equals its values in future
-        dataPlayer = LoadSavePlayer.Load();
-        dataPlayerOnScript = (DataPlayer)dataPlayer.Clone();
+		// Clone data to temporary data.
+		_temporaryDataPlayer = (DataPlayer)_dataPlayer.Clone();
 
-        speed = 3f;
-        score = 0;
+		_speed = 3f;
+        _score = 0;
         CountMoney = 0;
-        currentPlayer = dataPlayerOnScript.CurrentAnimal;
-        player = Instantiate<GameObject>(players[currentPlayer]);
-        player.transform.position = new Vector3(0, -2, 0);
-        posClear = new Vector2(0, 0);
+        _currentPlayer = _temporaryDataPlayer.CurrentAnimal;
+        _player = Instantiate<GameObject>(players[_currentPlayer]);
+        _player.transform.position = new Vector3(0, -2, 0);
+        _posClear = new Vector2(0, 0);
         InputAreasListsToGeneralList();
 
-        //set music
-        if (dataPlayer.IsMusicMainMenu)
+        // Set music
+        if (_dataPlayer.IsMusicMainMenu)
         {
             GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = true;
         }
@@ -88,49 +111,52 @@ public class RunGame : MonoBehaviour {
             GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = false;
         }
 
-        //set false that saying the last pieces are not deleting yet
+		// Set false that saying the last pieces 
+		// are not deleting yet.
         for (int i = 0; i != 5; i++)
-        pieceColumn[i] = false;
+        _pieceColumn[i] = false;
 
-        //game starts with first area location
-        location = 1;
+        // Game starts with first area location
+        _location = 1;
 
-        //make a first pieces in game
+        // Instantiate first pieces in game.
         for (int line = -6; line != 7; line++)
         {
-            AddAreaInLine(line, location);
-            AddMaterialInLine(line, 1, ref posClear, false);
+            AddAreaInLine(line, _location);
+            AddMaterialInLine(line, 1, ref _posClear, false);
         }
     }
 
     void Update()
     {
-        deltaTime = Time.deltaTime;
-
-        //Debug.Log((Vector3.down * speed * deltaTime).y);
+        _deltaTime = Time.deltaTime;
 
         if (isGameOver)
         {
             //saveData
-            if (!isSave)
+            if (!_isSave)
             {
-                if (dataPlayerOnScript.Score < score) dataPlayerOnScript.Score = score;
-                dataPlayerOnScript.Coins += CountMoney;
+                // Do animation sit of animal
+                _player.GetComponent<Animator>().SetBool("StopToSit",true);
 
-                if (!EqualsTwoObjects()) SaveNewData();
-                isSave = true;
-
-                //do animation sit of animal
-                player.GetComponent<Animator>().SetBool("StopToSit",true);
-
-                //set off music
+                // Set off music
                 GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = false;
 
-                //load gameover window
+                if (_temporaryDataPlayer.Score < _score)
+					_temporaryDataPlayer.Score = _score;
+
+                _temporaryDataPlayer.Coins += CountMoney;
+
+                if (!EqualsTwoDataPlayer())
+					SaveNewData();
+
+                _isSave = true;
+
+                // Show gameover window
                 StartCoroutine(Wait(2f, () => 
                 {
                     GameObject.Find("Canvas").transform.Find("GameOverWindow").Find("Score").
-                    Find("TextGetScore").GetComponent<Text>().text = score.ToString();
+                    Find("TextGetScore").GetComponent<Text>().text = _score.ToString();
                     GameObject.Find("Canvas").transform.Find("GameOverWindow").Find("Coin").
                     Find("TextGetCoin").GetComponent<Text>().text = CountMoney.ToString();
 
@@ -141,91 +167,86 @@ public class RunGame : MonoBehaviour {
         }
         else
         {
-            //set text on block
-            textScoreBlockBlack.text = score.ToString();
+            // Set text on block
+            _textScoreBlockBlack.text = _score.ToString();
 
-            //moving pieces -----------before1
+            // Moving pieces -----------before1
             for (int i = 0; i != piecesAreas.Count; i++)
             {
-                piecesAreas[i].transform.Translate(Vector3.down * speed * deltaTime);
-                piecesMaterials[i].transform.Translate(Vector3.down * speed * deltaTime);
+                piecesAreas[i].transform.Translate(Vector3.down * _speed * _deltaTime);
+                piecesMaterials[i].transform.Translate(Vector3.down * _speed * _deltaTime);
             }
 
-            //destroying and deleting pieces - add new pieces
+            // Destroying and deleting pieces, add new pieces
             for (int i = 0; i != piecesAreas.Count; i++)
             {
-                pos = piecesAreas[i].transform.position;
+                _pos = piecesAreas[i].transform.position;
 
-                if (pos.y <= -7f)
+                if (_pos.y <= -7f)
                 {
-                    //delete line and add line
+                    // Delete line and add line
                     for (int  r = 0; r != 5; r++)
                     {
-                        //delete piece of area
+                        //Delete first piece of area in list
                         Destroy(piecesAreas[0]);
                         piecesAreas.RemoveAt(0);
-                        //delete piece of material
+                        // Delete first piece of material in list
                         Destroy(piecesMaterials[0]);
                         piecesMaterials.RemoveAt(0);
 
 
-                        //add new pieces in line
-                        if (!pieceColumn[0])
+                        // Add new pieces in line
+                        if (!_pieceColumn[0])
                         {
-                            AddAreaInLine(pos.y + 6f + 7f, location);
-                            AddMaterialInLine(pos.y + 6f + 7f, location, ref posClear);
-                            pieceColumn[0] = true;
-                            score++;            //add score
+                            AddAreaInLine(_pos.y + 6f + 7f, _location);
+                            AddMaterialInLine(_pos.y + 6f + 7f, _location, ref _posClear);
+                            _pieceColumn[0] = true;
+							
+							// Add score
+							_score++;            
 
-                            //increse speed
-                            if (score % 50 == 0 && speed < 6)
-                                speed += 0.3f;
+                            // Increse speed
+                            if (_score % 50 == 0 && _speed < 6)
+                                _speed += 0.3f;
                         }
-                        else if (pieceColumn[0] && !pieceColumn[1])
-                            pieceColumn[1] = true;
-                        else if (pieceColumn[1] && !pieceColumn[2])
-                            pieceColumn[2] = true;
-                        else if (pieceColumn[2] && !pieceColumn[3])
-                            pieceColumn[3] = true;
-                        else if (pieceColumn[3] && !pieceColumn[4])
+                        else if (_pieceColumn[0] && !_pieceColumn[1])
+                            _pieceColumn[1] = true;
+                        else if (_pieceColumn[1] && !_pieceColumn[2])
+                            _pieceColumn[2] = true;
+                        else if (_pieceColumn[2] && !_pieceColumn[3])
+                            _pieceColumn[3] = true;
+                        else if (_pieceColumn[3] && !_pieceColumn[4])
                         {
                             for (int j = 0; j != 5; j++)
-                                pieceColumn[j] = false;
+                                _pieceColumn[j] = false;
                         }
                     }
                 }
             }
 
-            //change location
-            if (countLoc != location && score >= location * 150)
+            // Change location
+            if (_countLoc != _location && _score >= _location * 150)
             {
-                location++;
+                _location++;
 
-                //set default speed
-                speed = (float)(3+0.5*(location-1))<4 ? (float)(3 + 0.5 * (location - 1)) : 4;
+                // Set new speed for location
+                _speed = (float)(3+0.5*(_location-1))<4 ? (float)(3 + 0.5 * (_location - 1)) : 4;
 
-                //change background color of camera4
+                // Change background color of camera4
                 Camera.main.GetComponent<Camera>().backgroundColor = new Color(
-                    colorLocation[location * 4 - 4] / 255, 
-                    colorLocation[location * 4 - 3] / 255, 
-                    colorLocation[location * 4 - 2] / 255, 
-                    colorLocation[location * 4 - 1] / 255);                           
+                    _colorLocation[_location * 4 - 4] / 255, 
+                    _colorLocation[_location * 4 - 3] / 255, 
+                    _colorLocation[_location * 4 - 2] / 255, 
+                    _colorLocation[_location * 4 - 1] / 255);                           
             }
 
         }
 
-        //check if player input escape menu or home
+        // Check if player input escape menu or home (on android)
         if((Input.GetKey(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Menu) || 
             Input.GetKeyDown(KeyCode.Home)) && !isGameOver)
         {
             GameObject.Find("Canvas").transform.Find("PauseWindow").gameObject.SetActive(true);
-
-            //here will I add ads window random
-            if (!isPause && Random.Range(0, 5) == Random.Range(0, 5))
-            {
-                //here show ad
-                //AdScript.showAds(true);
-            }
 
             isPause = true;
             Time.timeScale = 0;
@@ -234,11 +255,11 @@ public class RunGame : MonoBehaviour {
 
 
     /// <summary>
-    /// the delegate for send method like param in another method
+    /// The delegate for send method like param in another method
     /// </summary>
     delegate void someMethod();
     /// <summary>
-    /// wait some time before start some method
+    /// Wait some time before start some method
     /// </summary>
     /// <param name="seconds"></param>
     /// <param name="method"></param>
@@ -249,17 +270,16 @@ public class RunGame : MonoBehaviour {
         method();
     }    
     /// <summary>
-    /// input gameObject each location to generals Lists
+    /// Add gameObjects each location to generals Lists
     /// </summary>
     void InputAreasListsToGeneralList()
     {
-        //all locations area and materials in one 
+        // All locations area and materials in one 
         areasLoc = new List<List<GameObject>>();
         matDanLoc = new List<List<GameObject>>();
         matSafLoc = new List<List<GameObject>>();
 
-        //input gameObject each location to generals Lists
-        for (int i = 0; i != countLoc; i++)
+        for (int i = 0; i != _countLoc; i++)
         {
             switch (i+1)
             {
@@ -286,17 +306,23 @@ public class RunGame : MonoBehaviour {
     /// <param name="location"></param>
     void AddAreaInLine(float numberLine, short location)
     {
-        short locInList = (short)(location-1);                      //number of location in list
-        Vector3 posInMethod;                                        //position of piece                     
-        GameObject area;                                            //piece of area
+		// Number of location in list
+		short locInList = (short)(location-1);
+		// Position of piece  
+		Vector3 posInMethod;
+		// Piece of area
+		GameObject area;                                            
 
-        //create a left pieces
-        area = Instantiate<GameObject>(areasLoc[locInList][0]);      //create a new left piece
-        posInMethod = new Vector3(-2, numberLine, 0);                       //set a position of piece
-        area.transform.position = posInMethod;                              //transform piece
-        piecesAreas.Add(area);                                      //add to list
+        // Create a left pieces
+        area = Instantiate<GameObject>(areasLoc[locInList][0]);
+		// Set a position of piece
+		posInMethod = new Vector3(-2, numberLine, 0);
+		// Transform piece
+		area.transform.position = posInMethod;
+		// Add to list
+		piecesAreas.Add(area);                                      
 
-        //create a center pieces
+        // Create a center pieces
         for (int column = -1; column != 2; column++)
         {
             area = Instantiate<GameObject>(areasLoc[locInList][1]);
@@ -305,7 +331,7 @@ public class RunGame : MonoBehaviour {
             piecesAreas.Add(area);
         }
 
-        //create a right pieces
+        // Create a right pieces
         area = Instantiate<GameObject>(areasLoc[locInList][2]);
         posInMethod = new Vector3(2, numberLine, 0);
         area.transform.position = posInMethod;
@@ -317,37 +343,41 @@ public class RunGame : MonoBehaviour {
     /// <param name="numberLine"></param>
     /// <param name="min"></param>
     /// <param name="max"></param>
-    void AddMaterialInLine(float numberLine, short location, ref Vector2 posClear, bool withDanElem = true)
+    void AddMaterialInLine(float numberLine, short location, 
+		ref Vector2 posClear, bool withDanElem = true)
     {
-        Vector3 posInMethod;                                //position of piece   
+		// Position of piece
+		Vector3 posInMethod;    
+		// True if added
         bool[] danPosAdd = new bool[5];
-
-        for (int i = 0; i != 5; i++) danPosAdd[i] = false;
 
         for (int column = -2; column != 3; column++)
         {
-            //create safety material
+            // Create safety material
             if (!withDanElem || posClear.x == column || Random.Range(0, 2) == 0)
             {
-                material = GetRandomMaterial(false, true);
+                _material = GetRandomMaterial(false, true);
 
                 if (posClear.y == 1 && posClear.x == column)
                     posClear.y = 0;
             }
-            //create dangerous materials
+            // Create dangerous materials
             else
             {
-                material = GetRandomMaterial(true, true);
+                _material = GetRandomMaterial(true, true);
                 danPosAdd[column + 2] = true;
 
             }
 
-            posInMethod = new Vector3(column, numberLine, 0);   //create position of material
-            material.transform.position = posInMethod;          //transform material to position
-            piecesMaterials.Add(material);                      //add new material to list
+			// Create position of material
+			posInMethod = new Vector3(column, numberLine, 0); 
+			// Transform material to position
+            _material.transform.position = posInMethod;  
+			// Add new material to list with exist materials
+            piecesMaterials.Add(_material);      
         }
 
-        //create new position road where player can move safety
+        // Create new position road where player can move safety
         RandomClearRoad(ref posClear, ref danPosAdd);
     }
     /// <summary>
@@ -443,62 +473,70 @@ public class RunGame : MonoBehaviour {
         }
     }
     /// <summary>
-    /// create random material on area
+    /// Create random material on area
     /// </summary>
-    /// <param name="danElem"></param>
-    /// <param name="withCoin"></param>
+    /// <param name="danElem">Create dangerous elements</param>
+    /// <param name="withCoin">Create coins</param>
     /// <returns></returns>
     GameObject GetRandomMaterial(bool danElem, bool withCoin)
     {
-        GameObject material = null;                     //material that will create
-        bool alreadyMat = false;                        //position already has material or not (false - not)
+		// Material to create.
+		GameObject material = null;
+		// True if position already has material
+		bool alreadyMaterial = false;                        
 
-        //add coins to game
+        // Add coins to game
         if (withCoin && Random.Range(0, 20) == 0)
         {
             if (Random.Range(0, 3) == 0)
             {
-                //coin sliver
-                material = Instantiate<GameObject>(coins[0]);
-                alreadyMat = true;
+                // Add coin sliver
+                material = Instantiate(_coins[0]);
+
+                alreadyMaterial = true;
             }
-            else if (Random.Range(0, location < 10 ? 10 - location : 1) == 0)
+            else if (Random.Range(0, _location < 10 ? 10 - _location : 1) == 0)
             {
-                //coin gold
-                material = Instantiate<GameObject>(coins[1]);
-                alreadyMat = true;
+                // Add coin gold
+                material = Instantiate(_coins[1]);
+
+                alreadyMaterial = true;
             }
         }
-        //add empty object to game
-        if(!alreadyMat && Random.Range(0, 20) == 0)
+        // Add empty object to game.
+        if(!alreadyMaterial && Random.Range(0, 20) == 0)
         {
-            material = Instantiate<GameObject>(emptyObj);
-            alreadyMat = true;
+            material = Instantiate(_emptyObj);
+
+            alreadyMaterial = true;
         }
-        //add dangerous element to game
-        if (danElem && !alreadyMat)
+
+		// Add dangerous element according to the location
+		if (danElem && !alreadyMaterial)
         {
-            material = Instantiate<GameObject>(matDanLoc[location - 1]
-                [Random.Range(0, matDanLoc[location - 1].Count)]);
-            alreadyMat = true;
+			material = Instantiate(matDanLoc[_location - 1][Random.Range(
+				0, matDanLoc[_location - 1].Count)]);
+
+            alreadyMaterial = true;
         }
-        //add safety element to game
-        else if(!alreadyMat)
+		// Add safety element according to the location
+		else if (!alreadyMaterial)
         {
-            material = Instantiate<GameObject>(matSafLoc[location - 1]
-                [Random.Range(0, matSafLoc[location - 1].Count)]);
-            alreadyMat = true;
+            material = Instantiate(matSafLoc[_location - 1][Random.Range(
+				0, matSafLoc[_location - 1].Count)]);
+
+            alreadyMaterial = true;
         }
 
         return material;
     }
     /// <summary>
-    /// return if the dataPlayer objects are the same
+    /// Return true if the dataPlayer objects are the same
     /// </summary>
     /// <returns></returns>
-    public bool EqualsTwoObjects()
+    public bool EqualsTwoDataPlayer()
     {
-        if (dataPlayer == dataPlayerOnScript)
+        if (_dataPlayer == _temporaryDataPlayer)
             return true;
         else
             return false;
@@ -508,8 +546,14 @@ public class RunGame : MonoBehaviour {
     /// </summary>
     public void SaveNewData()
     {
-        LoadSavePlayer.Save(dataPlayerOnScript);
-        dataPlayer = (DataPlayer)dataPlayerOnScript.Clone();
+		IData iData;
+
+		// Save data.
+		iData = _temporaryDataPlayer;
+		LoadSave.Save(_temporaryDataPlayer, DataplayerManager.Instance.NameFile);
+
+		// Clone data to static class of data.
+        _dataPlayer = (DataPlayer)_temporaryDataPlayer.Clone();
     }
 }
 

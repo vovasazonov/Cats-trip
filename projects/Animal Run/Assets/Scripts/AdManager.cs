@@ -56,7 +56,7 @@ public class AdManager : MonoBehaviour {
     #region ads
 
 	/// <summary>
-	/// Inizialise app for ad before load ads like banner 
+	/// Inizialise app for ad before load ads (like banner)
 	/// only once on load application.
 	/// </summary>
     public void InitialiseAds()
