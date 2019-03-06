@@ -15,7 +15,7 @@ public class ButtonClick : MonoBehaviour {
     public void ClickLaterButton()
     {
         DataAd data = LoadSaveAd.Load();
-        data.clicksOnRestartButton = 0;
+        data.ClicksOnRestartButton = 0;
         LoadSaveAd.Save(data);
 
         //hide rate window
@@ -26,8 +26,8 @@ public class ButtonClick : MonoBehaviour {
     public void ClickRateButton()
     {
         DataAd data = LoadSaveAd.Load();
-        data.clicksOnRestartButton = 0;
-        data.isRatedApp = true;
+        data.ClicksOnRestartButton = 0;
+        data.IsRatedApp = true;
         LoadSaveAd.Save(data);
 
         //hide rate window
@@ -96,11 +96,11 @@ public class ButtonClick : MonoBehaviour {
 
         if(buttonMusic.GetComponent<Toggle>().isOn == true)
         {
-            dataPlayer.isMusicMainMenu = true;
+            dataPlayer.IsMusicMainMenu = true;
         }
         else
         {
-            dataPlayer.isMusicMainMenu = false;
+            dataPlayer.IsMusicMainMenu = false;
         }
 
         LoadSavePlayer.Save(dataPlayer);
@@ -122,9 +122,9 @@ public class ButtonClick : MonoBehaviour {
     public void Restart()
     {
         DataAd dataAd = LoadSaveAd.Load();
-        if (!dataAd.isRatedApp)
+        if (!dataAd.IsRatedApp)
         {
-            dataAd.clicksOnRestartButton++;
+            dataAd.ClicksOnRestartButton++;
             LoadSaveAd.Save(dataAd);
         }
 
@@ -217,7 +217,7 @@ public class ButtonClick : MonoBehaviour {
             toggle.interactable = false;
 
             //costumer can buy the animal
-            if (animals.CostAnimals[i] <= DataplayerManager.instance.Data.coins)
+            if (animals.CostAnimals[i] <= DataplayerManager.Instance.Data.Coins)
             {
                 //show buy button
                 GameObject.Find("CanvasClassic").transform.Find("WindowShop").
@@ -225,7 +225,7 @@ public class ButtonClick : MonoBehaviour {
             }
 
         }
-        else if (!DataplayerManager.instance.Data.boughtAnimals.Contains(i))
+        else if (!DataplayerManager.Instance.Data.BoughtAnimals.Contains(i))
         {
             //do that can't click on toggle
             toggle.interactable = true;
@@ -249,15 +249,17 @@ public class ButtonClick : MonoBehaviour {
             //check witch an animal costumer want to buy
             if (anAnimal.GetComponent<Toggle>().isOn)
             {
-                DataplayerManager.instance.Data.coins -= animals.CostAnimals[i];
+                DataplayerManager.Instance.Data.Coins -= animals.CostAnimals[i];
                 //add animal to bought animal list
-                DataplayerManager.instance.Data.boughtAnimals.Add(i);
+                DataplayerManager.Instance.Data.BoughtAnimals.Add(i);
                 //add to current animal
-                DataplayerManager.instance.Data.currentAnimal = i;
+                DataplayerManager.Instance.Data.CurrentAnimal = i;
 
-                //save data
-                //LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
-                DataplayerManager.instance.Save();
+				//save data
+				//LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
+				IData instance;
+				instance = DataplayerManager.Instance.Data;
+                LoadSave.Save(instance, DataplayerManager.Instance.NameFile);
 
                 //update menu values
                 BackgroundMenu.setValuesInStart(animals);
@@ -291,12 +293,14 @@ public class ButtonClick : MonoBehaviour {
             anAnimal.transform.Find("Vi").gameObject.SetActive(true);
 
             //set new current animal
-            DataplayerManager.instance.Data.currentAnimal = i;
-            //save data
-            //LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
-            DataplayerManager.instance.Save();
+            DataplayerManager.Instance.Data.CurrentAnimal = i;
+			//save data
+			//LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
+			IData instance;
+			instance = DataplayerManager.Instance.Data;
+			LoadSave.Save(instance, DataplayerManager.Instance.NameFile);
 
-        }
+		}
         else
         {
             //hide vi
@@ -310,20 +314,24 @@ public class ButtonClick : MonoBehaviour {
     #region buttons for test game
     public void MoreMoney()
     {
-        DataplayerManager.instance.Data.coins += 1000;
-        //LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
-        DataplayerManager.instance.Save();
-        //update menu
-        BackgroundMenu.setValuesInStart(animals);
+        DataplayerManager.Instance.Data.Coins += 1000;
+		//LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
+		IData instance;
+		instance = DataplayerManager.Instance.Data;
+		LoadSave.Save(instance, DataplayerManager.Instance.NameFile);
+		//update menu
+		BackgroundMenu.setValuesInStart(animals);
     }
 
     public void DefDat()
     {
-        DataplayerManager.instance.Data.SetDefoultData();
-        //LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
-        DataplayerManager.instance.Save();
+        DataplayerManager.Instance.Data.SetDefoultData();
+		//LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
+		IData instance;
+		instance = DataplayerManager.Instance.Data;
+		LoadSave.Save(instance, DataplayerManager.Instance.NameFile);
 
-        DataQuests data = LoadSaveQuests.Load();
+		DataQuests data = LoadSaveQuests.Load();
         data.SetDefoultData();
         LoadSaveQuests.Save(data);
 

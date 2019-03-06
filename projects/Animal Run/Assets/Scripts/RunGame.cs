@@ -72,14 +72,14 @@ public class RunGame : MonoBehaviour {
         speed = 3f;
         score = 0;
         CountMoney = 0;
-        currentPlayer = dataPlayerOnScript.currentAnimal;
+        currentPlayer = dataPlayerOnScript.CurrentAnimal;
         player = Instantiate<GameObject>(players[currentPlayer]);
         player.transform.position = new Vector3(0, -2, 0);
         posClear = new Vector2(0, 0);
         InputAreasListsToGeneralList();
 
         //set music
-        if (dataPlayer.isMusicMainMenu)
+        if (dataPlayer.IsMusicMainMenu)
         {
             GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = true;
         }
@@ -114,8 +114,8 @@ public class RunGame : MonoBehaviour {
             //saveData
             if (!isSave)
             {
-                if (dataPlayerOnScript.score < score) dataPlayerOnScript.score = score;
-                dataPlayerOnScript.coins += CountMoney;
+                if (dataPlayerOnScript.Score < score) dataPlayerOnScript.Score = score;
+                dataPlayerOnScript.Coins += CountMoney;
 
                 if (!EqualsTwoObjects()) SaveNewData();
                 isSave = true;

@@ -363,22 +363,22 @@ public class BackgroundMenu : MonoBehaviour {
     {
         
         //check if the list has animals
-        if (DataplayerManager.instance.Data.boughtAnimals == null)
+        if (DataplayerManager.Instance.Data.BoughtAnimals == null)
         {
 
-            DataplayerManager.instance.Data.boughtAnimals = new List<int>();
-            DataplayerManager.instance.Data.boughtAnimals.Add((int)Animals.animals.grayCat);
-            DataplayerManager.instance.Data.currentAnimal = (int)Animals.animals.grayCat;
+            DataplayerManager.Instance.Data.BoughtAnimals = new List<int>();
+            DataplayerManager.Instance.Data.BoughtAnimals.Add((int)Animals.animals.grayCat);
+            DataplayerManager.Instance.Data.CurrentAnimal = (int)Animals.animals.grayCat;
 
-            LoadSavePlayer.Save(DataplayerManager.instance.Data);
-            DataplayerManager.instance.Data = LoadSavePlayer.Load();
+            LoadSavePlayer.Save(DataplayerManager.Instance.Data);
+            DataplayerManager.Instance.Data = LoadSavePlayer.Load();
         }
         
         //set the best score in block in main menu
-        GameObject.Find("TextScoreNum").GetComponent<Text>().text = DataplayerManager.instance.Data.score.ToString();
+        GameObject.Find("TextScoreNum").GetComponent<Text>().text = DataplayerManager.Instance.Data.Score.ToString();
 
         //set music
-        if (DataplayerManager.instance.Data.isMusicMainMenu)
+        if (DataplayerManager.Instance.Data.IsMusicMainMenu)
         {
             GameObject.Find("CanvasClassic").transform.Find("ButtonMusic").gameObject.
             GetComponent<Toggle>().isOn = true;
@@ -394,7 +394,7 @@ public class BackgroundMenu : MonoBehaviour {
         #region set values in shop
         //set count of money in block in shop
         GameObject.Find("CanvasClassic").transform.Find("WindowShop").Find("BlockShowMoney").
-            Find("Text").GetComponent<Text>().text = DataplayerManager.instance.Data.coins.ToString();
+            Find("Text").GetComponent<Text>().text = DataplayerManager.Instance.Data.Coins.ToString();
 
         //find section of animals in canvas classic
         GameObject sectionAnimals = GameObject.Find("CanvasClassic").
@@ -406,7 +406,7 @@ public class BackgroundMenu : MonoBehaviour {
             GameObject anAnimal = sectionAnimals.transform.Find(animals.AnimalsInShop[i].ToString()).gameObject;
 
             //set cost of animal, set Vi (if bought)
-            if (DataplayerManager.instance.Data.boughtAnimals.Contains(animals.AnimalsInShop[i]))
+            if (DataplayerManager.Instance.Data.BoughtAnimals.Contains(animals.AnimalsInShop[i]))
             {
                 //costumer see vi
                 anAnimal.transform.Find("Vi").gameObject.SetActive(true);
@@ -425,7 +425,7 @@ public class BackgroundMenu : MonoBehaviour {
                 anAnimal.GetComponent<Toggle>().interactable = true;
 
                 //show cost of animal with green block if costumer has enogh money
-                if (DataplayerManager.instance.Data.coins >= animals.CostAnimals[i])
+                if (DataplayerManager.Instance.Data.Coins >= animals.CostAnimals[i])
                 {
                     //show green block
                     anAnimal.transform.Find("BlockGreen").gameObject.SetActive(true);
@@ -465,13 +465,13 @@ public class BackgroundMenu : MonoBehaviour {
             GameObject anAnimal = sectionAnimalsProfile.transform.Find(animals.AnimalsInShop[i].ToString()).gameObject;
 
             //do monipulations if the animal bought
-            if (DataplayerManager.instance.Data.boughtAnimals.Contains(i))
+            if (DataplayerManager.Instance.Data.BoughtAnimals.Contains(i))
             {
                 //show icon of animal in profile
                 anAnimal.SetActive(true);
 
                 //set vi and another when the icon is current animal
-                if (DataplayerManager.instance.Data.currentAnimal == i)
+                if (DataplayerManager.Instance.Data.CurrentAnimal == i)
                 {
                     anAnimal.GetComponent<Toggle>().isOn = true;
                     anAnimal.GetComponent<Toggle>().interactable = false;

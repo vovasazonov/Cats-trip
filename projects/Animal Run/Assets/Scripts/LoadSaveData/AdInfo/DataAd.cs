@@ -1,43 +1,133 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿/*
+*	Copyright (c) NromaGames
+*	Developer Sazonov Vladimir (Emilio) 
+*	Email : futureNroma@yandex.ru
+*/
+
 using System;
 
+/// <summary>
+/// Data about ad interaction
+/// </summary>
 [Serializable]
 public class DataAd : IData{
+	//[WARNING : IF YOU WILL CHANGE NAME OR DELETE VALUES - THE FILE DATA WILL GET DEFAULT VALUES!]
 
-    //values witch have to save to file 
-    //[WARNING : IF YOU WILL CHANGE NAME OR DELETE VALUES - THE FILE DATA WILL GET DEFAULT VALUES!]
-    public DateTime dateAd = DateTime.Today;//the day of last using in ad
-    public int clicksOnAdFull = 0;
-    public int clicksOnAdBanner = 0;
-    public bool wasTodayRewardVideo = false;
+	// The day of last using in ad
+	private DateTime _dateAd = DateTime.Today;
+	// Count that was clicked on ad full
+	private int _clicksOnAdFull = 0;
+	// Count that was clicked on ad banner
+	private int _clicksOnAdBanner = 0;
+	// True if there was rewarded video today
+	private bool _wasTodayRewardVideo = false;
 
-    #region rate values
-    public bool isRatedApp = false;
-    public int clicksOnRestartButton = 0;
-    #endregion
+	public DateTime DateAd
+	{
+		get
+		{
+			return _dateAd;
+		}
 
-    /// <summary>
-    /// set defoult data
-    /// </summary>
-    public void SetDefoultData()
+		set
+		{
+			_dateAd = value;
+		}
+	}
+
+	public int ClicksOnAdFull
+	{
+		get
+		{
+			return _clicksOnAdFull;
+		}
+
+		set
+		{
+			_clicksOnAdFull = value;
+		}
+	}
+
+	public int ClicksOnAdBanner
+	{
+		get
+		{
+			return _clicksOnAdBanner;
+		}
+
+		set
+		{
+			_clicksOnAdBanner = value;
+		}
+	}
+
+	public bool WasTodayRewardVideo
+	{
+		get
+		{
+			return _wasTodayRewardVideo;
+		}
+
+		set
+		{
+			_wasTodayRewardVideo = value;
+		}
+	}
+
+
+	#region rate values
+	private bool _isRatedApp = false;
+	private int _clicksOnRestartButton = 0;
+
+	public bool IsRatedApp
+	{
+		get
+		{
+			return _isRatedApp;
+		}
+
+		set
+		{
+			_isRatedApp = value;
+		}
+	}
+
+	public int ClicksOnRestartButton
+	{
+		get
+		{
+			return _clicksOnRestartButton;
+		}
+
+		set
+		{
+			_clicksOnRestartButton = value;
+		}
+	}
+
+	#endregion
+
+	/// <summary>
+	/// Set default data like user just 
+	/// in first enter to game.
+	/// </summary>
+	public void SetDefoultData()
     {
         #region rate values
-        isRatedApp = false;
-        clicksOnRestartButton = 0;
+        IsRatedApp = false;
+        ClicksOnRestartButton = 0;
         #endregion
 
-        dateAd = DateTime.Today;//the day of last using in ad
-        clicksOnAdFull = 0;
-        clicksOnAdBanner = 0;
+        DateAd = DateTime.Today;
+        ClicksOnAdFull = 0;
+        ClicksOnAdBanner = 0;
     }
 
-        /// <summary>
-        /// clone object data
-        /// </summary>
-        /// <returns>clone object</returns>
-        public object Clone()
+    /// <summary>
+    /// Clone object data
+    /// </summary>
+    /// <returns>clone object</returns>
+    public object Clone()
     {
         return this.MemberwiseClone();
     }

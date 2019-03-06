@@ -104,11 +104,11 @@ public class AdScript : MonoBehaviour
         //get the date of today
         dateToday = DateTime.Today;
 
-        if (dateToday != dataAd.dateAd)
+        if (dateToday != dataAd.DateAd)
         {
-            dataAd.dateAd = dateToday;
-            dataAd.clicksOnAdBanner = 0;
-            dataAd.clicksOnAdFull = 0;
+            dataAd.DateAd = dateToday;
+            dataAd.ClicksOnAdBanner = 0;
+            dataAd.ClicksOnAdFull = 0;
 
             LoadSaveAd.Save(dataAd);
         }
@@ -268,7 +268,7 @@ public class AdScript : MonoBehaviour
         dataQuests.wasTodayRewardVideo = true;
         LoadSaveQuests.Save(dataQuests);
 
-        dataPlayer.coins += (int)e.Amount;
+        dataPlayer.Coins += (int)e.Amount;
         LoadSavePlayer.Save(dataPlayer);
 
         //update menu 
@@ -295,7 +295,7 @@ public class AdScript : MonoBehaviour
     private void FullWinAd_OnAdOpening(object sender, System.EventArgs e)
     {
         //add click
-        dataAd.clicksOnAdFull++;
+        dataAd.ClicksOnAdFull++;
 
         //delete ad 
         fullWinAd.Destroy();
@@ -322,7 +322,7 @@ public class AdScript : MonoBehaviour
         isLoadedAdFull = true;
 
         //if there is less clicks than 3, show ad
-        if(dataAd.clicksOnAdFull > 3)
+        if(dataAd.ClicksOnAdFull > 3)
         {
             //delete ad
             fullWinAd.Destroy();
@@ -349,7 +349,7 @@ public class AdScript : MonoBehaviour
         bannerAd.Destroy();
         isDestroyedBanner = true;
 
-        dataAd.clicksOnAdBanner++;
+        dataAd.ClicksOnAdBanner++;
         LoadSaveAd.Save(dataAd);
 
         throw new NotImplementedException();
@@ -360,7 +360,7 @@ public class AdScript : MonoBehaviour
         bannerAd.Hide();
         isLoadedBanner = true;
 
-        if(dataAd.clicksOnAdBanner >= 3)
+        if(dataAd.ClicksOnAdBanner >= 3)
         {
             //destroy banner
             bannerAd.Destroy();

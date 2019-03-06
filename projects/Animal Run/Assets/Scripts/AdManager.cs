@@ -1,123 +1,67 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*
+*	Copyright (c) NromaGames
+*	Developer Sazonov Vladimir (Emilio) 
+*	Email : futureNroma@yandex.ru
+*/
+
+using System.Collections;
 using UnityEngine;
-using System.IO;
 using System;
-using System.Runtime.Serialization.Formatters.Binary;
-using UnityEngine.SceneManagement;
 using GoogleMobileAds.Api;
 
+/// <summary>
+/// Manage with ad.
+/// Give access to:
+/// namefile,
+/// class with data
+/// </summary>
 public class AdManager : MonoBehaviour {
 
-    public static AdManager instance;
-    private DataAd data;
+	#region Variables
+	public static AdManager Instance;
 
-    #region values of ads
-    //identify of ads admob
-    //for test banner use "ca-app-pub-3940256099942544/6300978111"
-    //for production banner use "ca-app-pub-3742889557707024/4531467068";
-    private const string bannerCode1 = "ca-app-pub-3742889557707024/4531467068";
-    //for test InterstitialAd use "ca-app-pub-3940256099942544/1033173712"
-    //for production InterstitialAd use "ca-app-pub-3742889557707024/5999222670"
-    private const string fullAdWinCode = "ca-app-pub-3742889557707024/5999222670";
-    //for test video ad use "ca-app-pub-3940256099942544/5224354917"
-    //for production video ad use "ca-app-pub-3742889557707024/3367322884"
-    private const string videoAdCode = "ca-app-pub-3742889557707024/3367322884";
+	// Data that keeping information.
+	public DataAd Data { get; set; }
+	// Name of file.
+	private string _nameFile = "adInfo.dat";
+	public string NameFile
+	{
+		get
+		{
+			return _nameFile;
+		}
+	}
+	#endregion
+	#region values of ads
+	// Identify of ads admob
+	// For test banner use "ca-app-pub-3940256099942544/6300978111"
+	// For production banner use "ca-app-pub-3742889557707024/4531467068";
+	private const string _bannerCode1 = "ca-app-pub-3742889557707024/4531467068";
+    // For test InterstitialAd use "ca-app-pub-3940256099942544/1033173712"
+    // For production InterstitialAd use "ca-app-pub-3742889557707024/5999222670"
+    private const string _fullAdWinCode = "ca-app-pub-3742889557707024/5999222670";
+    // For test video ad use "ca-app-pub-3940256099942544/5224354917"
+    // For production video ad use "ca-app-pub-3742889557707024/3367322884"
+    private const string _videoAdCode = "ca-app-pub-3742889557707024/3367322884";
 
-    InterstitialAd fullWinAd;
-    BannerView bannerAd;
-    RewardBasedVideoAd videoAd;
+    private InterstitialAd _fullWinAd;
+	private BannerView _bannerAd;
+	private RewardBasedVideoAd _videoAd;
+    private AdRequest _request = new AdRequest.Builder().Build();
 
-    //date that helps to check amount of clicks in current date
-    DateTime dateToday = new DateTime();
-
-    private AdRequest request = new AdRequest.Builder().Build();
+    // Date that helps to check amount of clicks in current date
+    private DateTime _dateToday = new DateTime();
     #endregion
 
-
-    private bool isReady = false;
-    public bool IsReady
-    {
-        get
-        {
-            return isReady;
-        }
-    }
-
-    public DataAd Data
-    {
-        get
-        {
-            return data;
-        }
-
-        set
-        {
-            data = value;
-        }
-    }
-    
-
-    public void Load()
-    {
-        //check if folder "saves" exists
-        if (File.Exists(Application.persistentDataPath + "/saves/adInfo.dat"))
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-
-            FileStream file = File.Open(Application.persistentDataPath + "/saves/adInfo.dat", FileMode.Open);
-
-            //try load data
-            try
-            {
-                //load data
-                data = (DataAd)bf.Deserialize(file);
-                file.Close();
-
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e.Message);
-
-                //close load file
-                file.Close();
-
-                //set defoult values and save in new file
-                data = new DataAd();
-                data.SetDefoultData();
-
-                //save new data
-                Save();
-            }
-        }
-        else
-        {
-            //set defoult values and save in new file
-            data.SetDefoultData();
-            Save();
-        }
-
-        isReady = true;
-    }
-
-    public void Save()
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-
-        //check if folder "saves" exists
-        if (!Directory.Exists(Application.persistentDataPath + "/saves"))
-            Directory.CreateDirectory(Application.persistentDataPath + "/saves");
-
-        FileStream file = new FileStream(Application.persistentDataPath + "/saves/adInfo.dat", FileMode.Create);
-
-        bf.Serialize(file, data);
-        file.Close();
-    }
-
     #region ads
+
+	/// <summary>
+	/// Inizialise app for ad before load ads like banner 
+	/// only once on load application.
+	/// </summary>
     public void InitialiseAds()
     {
-        //for ad before load ad
+        // For ad before load ad
 #if UNITY_ANDROID && !UNITY_EDITOR
         string appId = "ca-app-pub-3742889557707024~9490906439";
         //#elif UNITY_IPHONE
@@ -131,68 +75,76 @@ public class AdManager : MonoBehaviour {
         MobileAds.Initialize(appId);
     }
 
-    public void CheckDate()
+	/// <summary>
+	/// Update interaction with ad
+	/// if day changes
+	/// </summary>
+    public void UpdateData()
     {
-        //get the date of today
-        dateToday = DateTime.Today;
+        // Get the date of today
+        _dateToday = DateTime.Today;
 
-        if (dateToday != data.dateAd)
+        if (_dateToday != Data.DateAd)
         {
-            data.dateAd = dateToday;
-            data.clicksOnAdBanner = 0;
-            data.clicksOnAdFull = 0;
+			IData instance;
 
-            Save();
-        }
+			Data.DateAd = _dateToday;
+			Data.ClicksOnAdBanner = 0;
+			Data.ClicksOnAdFull = 0;
+
+			// Save information
+			instance = AdManager.Instance.Data;
+			LoadSave.Save(instance, NameFile);
+		}
     }
 
     //initialization and set events to ads
 
     public void FullWinAd()
     {
-        if(fullWinAd == null)
+        if(_fullWinAd == null)
         {
-            fullWinAd = new InterstitialAd(fullAdWinCode);
+            _fullWinAd = new InterstitialAd(_fullAdWinCode);
 
             //call when an ad is clicked
-            fullWinAd.OnAdOpening += FullWinAd_OnAdOpening;
+            _fullWinAd.OnAdOpening += FullWinAd_OnAdOpening;
             //call when an ad loaded
-            fullWinAd.OnAdLoaded += FullWinAd_OnAdLoaded;
+            _fullWinAd.OnAdLoaded += FullWinAd_OnAdLoaded;
             //call when an ad failed to load
-            fullWinAd.OnAdFailedToLoad += FullWinAd_OnAdFailedToLoad;
+            _fullWinAd.OnAdFailedToLoad += FullWinAd_OnAdFailedToLoad;
             //call when ad closed
-            fullWinAd.OnAdClosed += FullWinAd_OnAdClosed;
+            _fullWinAd.OnAdClosed += FullWinAd_OnAdClosed;
 
             //load ad
             //sent request and load ad
-            fullWinAd.LoadAd(request);
+            _fullWinAd.LoadAd(_request);
         }
     }
 
     public void BannerAd()
     {
-        if(bannerAd == null)
+        if(_bannerAd == null)
         {
-            bannerAd = new BannerView(bannerCode1, AdSize.Banner, AdPosition.Bottom);
+            _bannerAd = new BannerView(_bannerCode1, AdSize.Banner, AdPosition.Bottom);
 
-            bannerAd.OnAdLoaded += BannerAd_OnAdLoaded;
-            bannerAd.OnAdFailedToLoad += BannerAd_OnAdFailedToLoad;
-            bannerAd.OnAdOpening += BannerAd_OnAdOpening;
+            _bannerAd.OnAdLoaded += BannerAd_OnAdLoaded;
+            _bannerAd.OnAdFailedToLoad += BannerAd_OnAdFailedToLoad;
+            _bannerAd.OnAdOpening += BannerAd_OnAdOpening;
 
-            bannerAd.LoadAd(request);
+            _bannerAd.LoadAd(_request);
         }
     }
 
     public void VideoRewardedAd()
     {
-        if(videoAd == null)
+        if(_videoAd == null)
         {
-            videoAd = RewardBasedVideoAd.Instance;
-            videoAd.OnAdRewarded += VideoAd_OnAdRewarded;
-            videoAd.OnAdLoaded += VideoAd_OnAdLoaded;
-            videoAd.OnAdFailedToLoad += VideoAd_OnAdFailedToLoad;
+            _videoAd = RewardBasedVideoAd.Instance;
+            _videoAd.OnAdRewarded += VideoAd_OnAdRewarded;
+            _videoAd.OnAdLoaded += VideoAd_OnAdLoaded;
+            _videoAd.OnAdFailedToLoad += VideoAd_OnAdFailedToLoad;
 
-            videoAd.LoadAd(request, videoAdCode);
+            _videoAd.LoadAd(_request, _videoAdCode);
 
         }
     }
@@ -253,13 +205,15 @@ public class AdManager : MonoBehaviour {
     private void FullWinAd_OnAdOpening(object sender, System.EventArgs e)
     {
         //add click
-        data.clicksOnAdFull++;
+        Data.ClicksOnAdFull++;
 
         //delete ad 
-        fullWinAd.Destroy();
+        _fullWinAd.Destroy();
 
         //save click to file
-        Save();
+		IData instance;
+		instance = Data;
+		LoadSave.Save(Data, NameFile);
 
         throw new System.NotImplementedException();
     }
@@ -267,7 +221,7 @@ public class AdManager : MonoBehaviour {
     private void FullWinAd_OnAdFailedToLoad(object sender, AdFailedToLoadEventArgs e)
     {
         //destroy ad
-        fullWinAd.Destroy();
+        _fullWinAd.Destroy();
 
         throw new System.NotImplementedException();
 
@@ -276,10 +230,10 @@ public class AdManager : MonoBehaviour {
     private void FullWinAd_OnAdLoaded(object sender, System.EventArgs e)
     {
         //if there is less clicks than 3, show ad
-        if (data.clicksOnAdFull > 3)
+        if (Data.ClicksOnAdFull > 3)
         {
             //destroy ad
-            fullWinAd.Destroy();
+            _fullWinAd.Destroy();
 
             //show another ad or my ad
 
@@ -294,7 +248,7 @@ public class AdManager : MonoBehaviour {
     private void BannerAd_OnAdFailedToLoad(object sender, AdFailedToLoadEventArgs e)
     {
         //destroy ad
-        bannerAd.Destroy();
+        _bannerAd.Destroy();
 
         throw new NotImplementedException();
     }
@@ -302,22 +256,24 @@ public class AdManager : MonoBehaviour {
     private void BannerAd_OnAdOpening(object sender, EventArgs e)
     {
         //destroy ad
-        bannerAd.Destroy();
+        _bannerAd.Destroy();
 
-        data.clicksOnAdBanner++;
-        Save();
+        Data.ClicksOnAdBanner++;
+		IData instance;
+		instance = Data;
+		LoadSave.Save(Data, NameFile);
 
-        throw new NotImplementedException();
+		throw new NotImplementedException();
     }
     //call when banner loaded
     private void BannerAd_OnAdLoaded(object sender, EventArgs e)
     {
-        bannerAd.Hide();
+        _bannerAd.Hide();
 
-        if (data.clicksOnAdBanner >= 3)
+        if (Data.ClicksOnAdBanner >= 3)
         {
             //destroy banner
-            bannerAd.Destroy();
+            _bannerAd.Destroy();
         }
 
         throw new NotImplementedException();

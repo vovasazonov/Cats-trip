@@ -9,12 +9,12 @@ using System.IO;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 
-public class LoadSave : MonoBehaviour {
+static public class LoadSave {
 
 	/// <summary>
 	/// Save the class with data information interaction.
 	/// </summary>
-	public void Save<T>(T Data) where T : IData
+	static public void Save<T>(T Data, string nameFile) where T : IData
 	{
 		BinaryFormatter bf = new BinaryFormatter();
 
@@ -24,11 +24,12 @@ public class LoadSave : MonoBehaviour {
 
 		// Create new file.
 		FileStream file = new FileStream(Application.persistentDataPath +
-			"/saves/questsInfo.dat", FileMode.Create);
+			"/saves/"+ nameFile, FileMode.Create);
 
 		bf.Serialize(file, Data);
 		file.Close();
 	}
+
 	/// <summary>
 	/// Load the class with information of quests monipulations.
 	/// </summary>
@@ -36,47 +37,44 @@ public class LoadSave : MonoBehaviour {
 	/// <param name="Data">Data class like DataAd, DataQuests end etc.</param>
 	/// <param name="isReady">True if file loaded.</param>
 	/// <param name="nameFile">Name of data file. </param>
-	public void Load<T>(T Data, out bool isReady, string nameFile) where T : IData
+	/// <returns>Is loaded</returns>
+	static public void Load<T>(ref T Data, string nameFile) where T : IData
 	{
-		isReady = false;
-
-		//check if folder "saves" exists
-		if (File.Exists(Application.persistentDataPath + "/saves/questsInfo.dat"))
+		// Check if folder "saves" exists.
+		if (File.Exists(Application.persistentDataPath + "/saves/"+ nameFile))
 		{
 			BinaryFormatter bf = new BinaryFormatter();
 
-			FileStream file = File.Open(Application.persistentDataPath + "/saves/questsInfo.dat", FileMode.Open);
+			FileStream file = File.Open(Application.persistentDataPath + "/saves/"+ 
+				nameFile, FileMode.Open);
 
-			//try load data
 			try
 			{
-				//load data
-				Data = (DataQuests)bf.Deserialize(file);
+				// Load data.
+				Data = (T)bf.Deserialize(file);
 				file.Close();
-
 			}
 			catch (Exception e)
 			{
 				Debug.Log(e.Message);
 
-				//close load file
+				// Close file
 				file.Close();
 
-				//set defoult values and save in new file
-				Data = new DataQuests();
+				// Set defoult values
 				Data.SetDefoultData();
 
-				//save new data
-				Save();
+				// Save new data
+				Save(Data, nameFile);
 			}
 		}
 		else
 		{
-			//set defoult values and save in new file
+			// Set defoult values
 			Data.SetDefoultData();
-			Save();
-		}
 
-		IsReady = true;
+			// Save new data
+			Save(Data, nameFile);
+		}
 	}
 }

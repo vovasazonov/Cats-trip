@@ -1,30 +1,33 @@
-﻿using System.Collections;
+﻿/*
+*	Copyright (c) NromaGames
+*	Developer Sazonov Vladimir (Emilio) 
+*	Email : futureNroma@yandex.ru
+*/
+
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+/// <summary>
+/// Manage with languages in
+/// the game.
+/// </summary>
 public class LocalizationManager : MonoBehaviour
 {
-
     public static LocalizationManager instance;
+	
+	// Dictionary with key and word for it
+    private Dictionary<string, string> _localizedText;
+	
+    private string _missingTextString = "Localized text not found";
 
-    private Dictionary<string, string> localizedText;
-    private bool isReady = false;
-    private string missingTextString = "Localized text not found";
-
-    //return value isReady
-    public bool IsReady
-    {
-        get
-        {
-            return isReady;
-        }
-    }
-
-    //when click on button change languege
+    /// <summary>
+	/// Load localized text from file
+	/// </summary>
+	/// <param name="fileName"></param>
     public void LoadLocalizedText(string fileName)
     {       
-        localizedText = new Dictionary<string, string>();
+        _localizedText = new Dictionary<string, string>();
 
         string filePath = Path.Combine(Application.streamingAssetsPath, fileName);
         string dataAsJson;
@@ -44,30 +47,32 @@ public class LocalizationManager : MonoBehaviour
             
             for (int i = 0; i < loadedData.items.Length; i++)
             {
-                localizedText.Add(loadedData.items[i].key, loadedData.items[i].value);
+                _localizedText.Add(loadedData.items[i].key, loadedData.items[i].value);
             }
 
-            Debug.Log("Data loaded, dictionary contains: " + localizedText.Count + " entries");
+            Debug.Log("Data loaded, dictionary contains: " + _localizedText.Count + " entries");
         }
         else
         {
             Debug.LogError("Cannot find file!");
         }
-
-        isReady = true;
     }
 
-    //set localized value on start
-    public string GetLocalizedValue(string key)
+	/// <summary>
+	/// Get value by key of word
+	/// </summary>
+	/// <param name="key"></param>
+	/// <returns></returns>
+	public string GetLocalizedValue(string key)
     {
-        string result = missingTextString;
-        if (localizedText.ContainsKey(key))
+        string result = _missingTextString;
+
+        if (_localizedText.ContainsKey(key))
         {
-            result = localizedText[key];
+            result = _localizedText[key];
         }
 
         return result;
-
     }
 
 }
