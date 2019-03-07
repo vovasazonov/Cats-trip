@@ -273,7 +273,7 @@ public class AdScript : MonoBehaviour
 
         //update menu 
         Animals animals = new Animals();
-        BackgroundMenu.setValuesInStart(animals);
+        BackgroundMenu.SetValuesInStart(animals);
        
         throw new NotImplementedException();
     }

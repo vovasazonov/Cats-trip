@@ -4,12 +4,6 @@
 *	Email : futureNroma@yandex.ru
 */
 
-/*
-*	Copyright (c) NromaGames
-*	Developer Sazonov Vladimir (Emilio) 
-*	Email : futureNroma@yandex.ru
-*/
-
 using UnityEngine;
 
 /// <summary>

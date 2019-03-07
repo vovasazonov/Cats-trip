@@ -1,9 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿/*
+*	Copyright (c) NromaGames
+*	Developer Sazonov Vladimir (Emilio) 
+*	Email : futureNroma@yandex.ru
+*/
+
+using UnityEngine;
 
 public class ScreenFader : MonoBehaviour
 {
-
     public enum FadeState { In, Out, Stop, InEnd, OutEnd }
 
     Texture colorTexture;
@@ -13,14 +17,14 @@ public class ScreenFader : MonoBehaviour
 
     public FadeState fadeState;
 
-    public float fadeSpeed;     // Скорость стремления баланса
-
-    public float fromInDelay;    // Мнимые задержки перед началом процесса затемнение/расцветания
+	// Speed of desire balance.
+    public float fadeSpeed;
+	// Imaginary delay before starting the process the blackout of darkening/bloomings
+	public float fromInDelay; 
     public float fromOutDelay;
 
     void Awake()
     {
-
         Texture2D nullTexture = new Texture2D(1, 1) as Texture2D;
         nullTexture.SetPixel(0, 0, Color.black);
         nullTexture.Apply();
@@ -28,13 +32,10 @@ public class ScreenFader : MonoBehaviour
         colorTexture = (Texture)nullTexture;
 
         fadeBalance = (1 + fromInDelay);
-
-
     }
 
     void Update()
     {
-
         fadeColor.a = fadeBalance;
 
         if (fadeBalance > (1 + fromInDelay))
