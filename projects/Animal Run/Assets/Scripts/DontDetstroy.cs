@@ -6,7 +6,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Don't destroy object.
+/// Don't destroy game object.
 /// </summary>
 public class DontDetstroy : MonoBehaviour {
 

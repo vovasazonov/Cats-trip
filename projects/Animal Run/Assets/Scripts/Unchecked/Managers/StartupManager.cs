@@ -20,26 +20,25 @@ public class StartupManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-		IData iData;
+		//IData iData;
 
 		// There are not object yet.
 		// Data didnt loaded yet.
 		if (_instance == null)
 		{
 			_instance = this;
-			
+
 			// Load DataPlayer
-			iData = (IData)DataplayerManager.Instance.Data;
-			LoadSave.Load(ref iData, DataplayerManager.Instance.NameFile);
-			DataplayerManager.Instance.Data = (DataPlayer)iData;
+			DataPlayer dataPlayer = DataplayerManager.Instance.Data;
+			LoadSave.Load(ref dataPlayer, DataplayerManager.Instance.NameFile);
+
 			// Load AdData
-			iData = (IData)AdManager.Instance.Data;
-			LoadSave.Load(ref iData, AdManager.Instance.NameFile);
-			AdManager.Instance.Data = (DataAd)iData;
+			DataAd dataAd = AdManager.Instance.Data;
+			LoadSave.Load(ref dataAd, AdManager.Instance.NameFile);
+
 			// Load dataQuests
-			iData = (IData)QuestsManager.instance.Data;
-			LoadSave.Load(ref iData, QuestsManager.instance.NameFile);
-			QuestsManager.instance = (QuestsManager)iData;
+			DataQuests dataQuests = QuestsManager.Instance.Data;
+			LoadSave.Load(ref dataQuests, QuestsManager.Instance.NameFile);
 
 			// Get languege
 			/* Change to next alghorithm:
@@ -50,7 +49,7 @@ public class StartupManager : MonoBehaviour
 			 *	Befor change to alghorithm, be sure that font 
 			 *	suppor languages
 			 */
-			LocalizationManager.instance.LoadLocalizedText("localizedText_en.json");
+			LocalizationManager.Instance.LoadLocalizedText("localizedText_en.json");
 
 			// Load scen when all data loaded
 			SceneManager.LoadScene("MainMenu");

@@ -696,7 +696,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1550527697}
-        m_MethodName: ExitQuests
+        m_MethodName: HideQuests
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2549,7 +2549,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.44000244, y: -5.0000305}
+  m_AnchoredPosition: {x: 0.44000244, y: -5.000061}
   m_SizeDelta: {x: -59.51111, y: 71.48352}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &684291666
@@ -3027,7 +3027,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1550527697}
-        m_MethodName: ExitShop
+        m_MethodName: HideShop
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4158,7 +4158,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1550527697}
-        m_MethodName: ExitProfile
+        m_MethodName: HideProfile
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6726,7 +6726,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1550527697}
-        m_MethodName: ClickLaterButton
+        m_MethodName: ClickLaterRateButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7080,7 +7080,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1798218291
 Transform:
   m_ObjectHideFlags: 0
@@ -7172,7 +7172,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1550527697}
-        m_MethodName: msgInformation
+        m_MethodName: ShowMsgInformation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7527,26 +7527,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ba4095ff3e24b94bb1f84da5d8b7c8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
-  emptyObj: {fileID: 1138462725576688, guid: cd6107f7a2e75fe4985ff48237e6dfe4, type: 2}
-  areasLoc1:
+  _speed: 0
+  _emptyObj: {fileID: 1138462725576688, guid: cd6107f7a2e75fe4985ff48237e6dfe4, type: 2}
+  _areasLoc1:
   - {fileID: 1431415829891898, guid: a78be38aed0d38848b5baa45dcc5429b, type: 2}
-  - {fileID: 1833137241636284, guid: 330959e919c324f42bf96d1dad16b315, type: 2}
-  - {fileID: 1629719420249016, guid: f93119f16dee69e448be08bcd19c2565, type: 2}
-  matDanLoc1:
+  - {fileID: 1431415829891898, guid: a78be38aed0d38848b5baa45dcc5429b, type: 2}
+  - {fileID: 1431415829891898, guid: a78be38aed0d38848b5baa45dcc5429b, type: 2}
+  _matDanLoc1:
   - {fileID: 1975143544454696, guid: c7d5feaaf02adb842864ea4c4b01e870, type: 2}
   - {fileID: 1983179668481668, guid: c0b20a17c32999744a19c67f4b8c21b3, type: 2}
-  - {fileID: 1659365549848190, guid: ae741abd625a32d48b77199703b8f1b0, type: 2}
-  - {fileID: 1124792429119270, guid: 6c9372737a9b0d34ab4d59b87558e194, type: 2}
   - {fileID: 1920587813409866, guid: c5f511df20745b147a10ad238beb515b, type: 2}
   - {fileID: 1855148824200608, guid: e0b3e5966e0dda64f81ab642bb05722d, type: 2}
-  matSafLoc1:
+  - {fileID: 1659365549848190, guid: ae741abd625a32d48b77199703b8f1b0, type: 2}
+  _matSafLoc1:
   - {fileID: 1802970954934470, guid: 2eba09c73d2ca6241831565d1621f3a4, type: 2}
   - {fileID: 1183598417316892, guid: ec69e35496766704293f0b9d07956d34, type: 2}
   - {fileID: 1269878623028006, guid: d08baa5c58c842f4f943ecaf9faa1bd1, type: 2}
   - {fileID: 1989006795890484, guid: f04a518db12ac9042b464238cddec045, type: 2}
   - {fileID: 1756627237029320, guid: 518d50043cadf6e4cb78e195eb58adc7, type: 2}
   - {fileID: 1284806714010498, guid: 596b6042779808a419f684fda22b0806, type: 2}
+  - {fileID: 1124792429119270, guid: 6c9372737a9b0d34ab4d59b87558e194, type: 2}
   - {fileID: 1636516545741148, guid: 2e5e848b13b7aeb4396c4d54651f0788, type: 2}
   - {fileID: 1809674940808808, guid: 3d5acfc02fad48247a7a8757bc5c3a29, type: 2}
 --- !u!4 &1924207619

@@ -10,19 +10,11 @@ using UnityEngine;
 
 public class Animals {
 
-    //do default values before using object 
+    // Set default values before using object.
     public Animals()
     {
         SetAnimalsInShop();
         SetCostAnimals();
-    }
-
-    //contains the id of each animal
-    public enum animals
-    {
-        grayCat = 0,
-        pinkRabbit = 1,
-        brownHamster = 2
     }
 
     //here are animals that for sale in shop
@@ -52,9 +44,9 @@ public class Animals {
     {
         animalsInShop = new List<int>();
 
-        animalsInShop.Add((int)animals.grayCat);        
-        animalsInShop.Add((int)animals.pinkRabbit);       
-        animalsInShop.Add((int)animals.brownHamster);
+        animalsInShop.Add((int)Animal.GrayCat);        
+        animalsInShop.Add((int)Animal.PinkRabbit);       
+        animalsInShop.Add((int)Animal.BrownHamster);
         
     }
 
@@ -65,9 +57,9 @@ public class Animals {
     {
         costAnimals = new Dictionary<int, int>();
 
-        costAnimals[(int)animals.grayCat] = costAnimal.grayCat;
-        costAnimals[(int)animals.pinkRabbit] = costAnimal.pinkRabbit;
-        costAnimals[(int)animals.brownHamster] = costAnimal.brownHamster;
+        costAnimals[(int)Animal.GrayCat] = costAnimal.grayCat;
+        costAnimals[(int)Animal.PinkRabbit] = costAnimal.pinkRabbit;
+        costAnimals[(int)Animal.BrownHamster] = costAnimal.brownHamster;
     }
 
     private struct costAnimal

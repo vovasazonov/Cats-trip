@@ -391,12 +391,11 @@ public class BackgroundMenu : MonoBehaviour {
         {
 
 			dataPlayer.BoughtAnimals = new List<int>();
-			dataPlayer.BoughtAnimals.Add((int)Animals.animals.grayCat);
-			dataPlayer.CurrentAnimal = (int)Animals.animals.grayCat;
+			dataPlayer.BoughtAnimals.Add((int)Animal.GrayCat);
+			dataPlayer.CurrentAnimal = (int)Animal.GrayCat;
 
 			// Save information
-			IData iData = dataPlayer;
-			LoadSave.Save(iData, DataplayerManager.Instance.NameFile);
+			LoadSave.Save(dataPlayer, DataplayerManager.Instance.NameFile);
         }
         
         // Set the best score in block in main menu
@@ -522,9 +521,9 @@ public class BackgroundMenu : MonoBehaviour {
 		#endregion
 
 		#region set values in quests
-		DataQuests dataQuests = QuestsManager.instance.Data;
+		DataQuests dataQuests = QuestsManager.Instance.Data;
 
-        if (dataQuests.wasTodayRewardVideo)
+        if (dataQuests.WasTodayRewardVideo)
         {
             // Hide button
             GameObject.Find("CanvasClassic").transform.

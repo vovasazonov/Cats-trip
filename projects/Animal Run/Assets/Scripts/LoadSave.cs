@@ -9,6 +9,10 @@ using System.IO;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 
+/// <summary>
+/// Load and save data to file. 
+/// Need only two arguments: IData and nameFile.
+/// </summary>
 static public class LoadSave {
 
 	/// <summary>

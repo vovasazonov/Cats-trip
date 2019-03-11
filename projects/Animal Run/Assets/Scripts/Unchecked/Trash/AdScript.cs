@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿/*
+*	Copyright (c) NromaGames
+*	Developer Sazonov Vladimir (Emilio) 
+*	Email : futureNroma@yandex.ru
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -98,8 +104,8 @@ public class AdScript : MonoBehaviour
         isLoadedVideoAd = false;
         isDestroyedVideoAd = false;
 
-        //load data ad
-        dataAd = LoadSaveAd.Load();
+		//load data ad
+		dataAd = (DataAd)AdManager.Instance.Data.Clone();
 
         //get the date of today
         dateToday = DateTime.Today;
@@ -110,7 +116,8 @@ public class AdScript : MonoBehaviour
             dataAd.ClicksOnAdBanner = 0;
             dataAd.ClicksOnAdFull = 0;
 
-            LoadSaveAd.Save(dataAd);
+            //LoadSaveAd.Save(dataAd);
+			LoadSave.Save(dataAd, AdManager.Instance.NameFile);
         }
 
         //get windows shop and profile (banner need)
@@ -259,17 +266,22 @@ public class AdScript : MonoBehaviour
 
         //quests data
         DataQuests dataQuests = new DataQuests();
-        dataQuests = LoadSaveQuests.Load();
+		//dataQuests = LoadSaveQuests.Load();
+		dataQuests = (DataQuests)QuestsManager.Instance.Data.Clone();
 
         //player data
         DataPlayer dataPlayer = new DataPlayer();
-        dataPlayer = LoadSavePlayer.Load();
+		//dataPlayer = LoadSavePlayer.Load();
+		dataPlayer = (DataPlayer)DataplayerManager.Instance.Data.Clone();
 
-        dataQuests.wasTodayRewardVideo = true;
-        LoadSaveQuests.Save(dataQuests);
+        dataQuests.WasTodayRewardVideo = true;
+		//LoadSaveQuests.Save(dataQuests);
+		LoadSave.Save(dataQuests, QuestsManager.Instance.NameFile);
 
         dataPlayer.Coins += (int)e.Amount;
-        LoadSavePlayer.Save(dataPlayer);
+		//LoadSavePlayer.Save(dataPlayer);
+		LoadSave.Save(dataPlayer, DataplayerManager.Instance.NameFile);
+
 
         //update menu 
         Animals animals = new Animals();
@@ -300,9 +312,10 @@ public class AdScript : MonoBehaviour
         //delete ad 
         fullWinAd.Destroy();
         isDestroyedAdFull = true;
-            
-        //save click to file
-        LoadSaveAd.Save(dataAd);
+
+		//save click to file
+		//LoadSaveAd.Save(dataAd);
+		LoadSave.Save(dataAd, AdManager.Instance.NameFile);
 
         throw new System.NotImplementedException();
     }
@@ -350,7 +363,8 @@ public class AdScript : MonoBehaviour
         isDestroyedBanner = true;
 
         dataAd.ClicksOnAdBanner++;
-        LoadSaveAd.Save(dataAd);
+		//LoadSaveAd.Save(dataAd);
+		LoadSave.Save(dataAd, AdManager.Instance.NameFile);
 
         throw new NotImplementedException();
     }

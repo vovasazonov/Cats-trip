@@ -61,6 +61,33 @@ public class DataPlayer : IData{
         else return true;
     }
 
+	public override bool Equals(object obj)
+	{
+		if (obj == null)
+		{
+			return false;
+		}
+		DataPlayer d = obj as DataPlayer;
+		if (d as DataPlayer == null)
+			return false;
+
+		return this == d;
+	}
+
+	public bool Equals(DataPlayer obj)
+	{
+		if (obj == null)
+		{
+			return false;
+		}
+
+		return this == obj;
+	}
+
+	public override int GetHashCode()
+	{
+		return base.GetHashCode();
+	}
 
 	/// <summary>
 	/// Set default data like user just 
@@ -71,10 +98,10 @@ public class DataPlayer : IData{
         IsMusicMainMenu = true;
         Score = 0;
         Coins = 0;
-        CurrentAnimal = (int)Animals.animals.grayCat;
+        CurrentAnimal = (int)Animal.GrayCat;
         BoughtAnimals = new List<int>();
         BoughtAnimals.Clear();
-        BoughtAnimals.Add((int)Animals.animals.grayCat);
+        BoughtAnimals.Add((int)Animal.GrayCat);
     }
     /// <summary>
     /// clone object data

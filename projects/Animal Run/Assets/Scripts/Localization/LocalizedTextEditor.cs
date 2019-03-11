@@ -1,9 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*
+*	Copyright (c) NromaGames
+*	Developer Sazonov Vladimir (Emilio) 
+*	Email : futureNroma@yandex.ru
+*/
+
 using UnityEngine;
 using UnityEditor;
 using System.IO;
 
+/// <summary>
+/// Create gui on text editor to translate
+/// text to another langueges for translators.
+/// </summary>
 public class LocalizedTextEditor : EditorWindow
 {
     public LocalizationData localizationData;

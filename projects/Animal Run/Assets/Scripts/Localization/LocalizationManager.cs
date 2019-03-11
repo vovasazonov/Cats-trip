@@ -14,18 +14,28 @@ using System.IO;
 /// </summary>
 public class LocalizationManager : MonoBehaviour
 {
-    public static LocalizationManager instance;
+    public static LocalizationManager Instance;
 	
 	// Dictionary with key and word for it
     private Dictionary<string, string> _localizedText;
 	
     private string _missingTextString = "Localized text not found";
 
-    /// <summary>
+	private void Awake()
+	{
+		if (Instance == null)
+		{
+			Instance = this;
+
+			_localizedText = new Dictionary<string, string>(0);
+		}
+	}
+	
+	/// <summary>
 	/// Load localized text from file
 	/// </summary>
 	/// <param name="fileName"></param>
-    public void LoadLocalizedText(string fileName)
+	public void LoadLocalizedText(string fileName)
     {       
         _localizedText = new Dictionary<string, string>();
 

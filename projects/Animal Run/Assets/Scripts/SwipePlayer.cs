@@ -1,18 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*
+*	Copyright (c) NromaGames
+*	Developer Sazonov Vladimir (Emilio) 
+*	Email : futureNroma@yandex.ru
+*/
+
 using UnityEngine;
 
+/// <summary>
+/// Do interection with player in depedence swiped side.
+/// </summary>
 public class SwipePlayer : MonoBehaviour {
 
-    private Vector3 fp;   //first position touch
-    private Vector3 lp;   //last position touch
-
-    // Use this for initialization
-    void Start () {
-        
-    }
-
-    bool isMoved = false;
+	// First position touch
+	private Vector3 fp;
+	// Last position touch
+	private Vector3 lp;   
+	// True if object is moving to swiped side.
+    private bool isMoved = false;
 
     void Update()
     {
@@ -29,9 +33,11 @@ public class SwipePlayer : MonoBehaviour {
                 {
                     lp = touch.position;
                 }
-                if (!isMoved && (touch.phase == TouchPhase.Ended || (fp.x - lp.x) > 60 || (fp.x - lp.x) < -60))
+                if (!isMoved && (touch.phase == TouchPhase.Ended || 
+					(fp.x - lp.x) > 60 || (fp.x - lp.x) < -60))
                 {
-                    if ((fp.x - lp.x) > 60) // left swipe
+					// Left swipe
+                    if ((fp.x - lp.x) > 60) 
                     {
                         if (transform.position.x != -2)
                         {
@@ -40,7 +46,8 @@ public class SwipePlayer : MonoBehaviour {
 
                         isMoved = true;
                     }
-                    else if ((fp.x - lp.x) < -60) // right swipe
+					// Right swipe
+                    else if ((fp.x - lp.x) < -60) 
                     {
                         if (transform.position.x != 2)
                         {
@@ -49,9 +56,10 @@ public class SwipePlayer : MonoBehaviour {
 
                         isMoved = true;
                     }
-                    else if ((fp.y - lp.y) < -60) // up swipe
+					// Up swipe
+					else if ((fp.y - lp.y) < -60)
                     {
-                        // add your jumping code here
+                        // Add your jumping code or other here
                     }
                 }
                 if (touch.phase == TouchPhase.Ended)
@@ -60,8 +68,11 @@ public class SwipePlayer : MonoBehaviour {
                 }
             }
         }
-        else
-            fp = lp; // solve the problem after click button pauseNo player move
+		else
+		{
+			// Solve the problem after click button pauseNo player move
+			fp = lp;
+		}
     }
 
 

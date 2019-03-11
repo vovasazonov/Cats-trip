@@ -685,17 +685,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0baf7c9f7699e9f40a8932f391548244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textScoreBlockBlack: {fileID: 1632645881}
+  _textScoreBlockBlack: {fileID: 1632645881}
   players:
   - {fileID: 1971415016501128, guid: 31a7779c1ec8976489d1c1620c361575, type: 2}
   - {fileID: 1556641356219126, guid: 8f6225473267a044683d3c841cfa47c6, type: 2}
   - {fileID: 1422221689895194, guid: 643068a28a7baa142aef50870ac9ce21, type: 2}
-  speed: 3
-  emptyObj: {fileID: 1138462725576688, guid: cd6107f7a2e75fe4985ff48237e6dfe4, type: 2}
-  coins:
-  - {fileID: 1554342927806250, guid: 0f6e4b97e1d938947a6ae17b686f485b, type: 2}
+  _speed: 0
+  _emptyObj: {fileID: 1138462725576688, guid: cd6107f7a2e75fe4985ff48237e6dfe4, type: 2}
+  _coins:
   - {fileID: 1784896618689498, guid: d57b366503cdcba428142c9bcf6b2fe0, type: 2}
-  colorLocation: 81000000c80000003e000000ff000000ff000000ff000000ff000000ff000000
+  - {fileID: 1554342927806250, guid: 0f6e4b97e1d938947a6ae17b686f485b, type: 2}
+  _colorLocation: 0000000000000000000000000000000000000000000000000000000000000000
   areasLoc1:
   - {fileID: 1923903523760972, guid: bafd46bbab40d4d4baf4534d8ce02141, type: 2}
   - {fileID: 1454086183910918, guid: 7b5b542ffe097664ca9faf6139df3010, type: 2}

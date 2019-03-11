@@ -44,13 +44,23 @@ public class AdManager : MonoBehaviour {
     // For production video ad use "ca-app-pub-3742889557707024/3367322884"
     private const string _videoAdCode = "ca-app-pub-3742889557707024/3367322884";
 
-    private InterstitialAd _fullWinAd;
+	// Identity of test phone for show test ad
+	private const string _idTestPhone = "";
+
+	private InterstitialAd _fullWinAd;
 	private BannerView _bannerAd;
 	private RewardBasedVideoAd _videoAd;
-    private AdRequest _request = new AdRequest.Builder().Build();
 
-    // Date that helps to check amount of clicks in current date
-    private DateTime _dateToday = new DateTime();
+	///*for testing uncomment*/
+	//private AdRequest request = new AdRequest.Builder().AddTestDevice(AdRequest.TestDeviceSimulator).AddTestDevice(idTestPhoneMom).Build();
+	///*for testing uncomment*/
+
+	/*for prodoction uncomment*/
+	private AdRequest _request = new AdRequest.Builder().Build();
+	/*for prodoction uncomment*/
+
+	// Date that helps to check amount of clicks in current date
+	private DateTime _dateToday = new DateTime();
     #endregion
 
     #region ads
@@ -86,15 +96,13 @@ public class AdManager : MonoBehaviour {
 
         if (_dateToday != Data.DateAd)
         {
-			IData instance;
 
 			Data.DateAd = _dateToday;
 			Data.ClicksOnAdBanner = 0;
 			Data.ClicksOnAdFull = 0;
 
 			// Save information
-			instance = AdManager.Instance.Data;
-			LoadSave.Save(instance, NameFile);
+			LoadSave.Save(Instance.Data, NameFile);
 		}
     }
 
@@ -211,8 +219,6 @@ public class AdManager : MonoBehaviour {
         _fullWinAd.Destroy();
 
         //save click to file
-		IData instance;
-		instance = Data;
 		LoadSave.Save(Data, NameFile);
 
         throw new System.NotImplementedException();
@@ -278,13 +284,23 @@ public class AdManager : MonoBehaviour {
 
         throw new NotImplementedException();
     }
-    #endregion
-    #endregion
+	#endregion
+	#endregion
 
-    /// <summary>
-    /// the delegate for send method like param in another method
-    /// </summary>
-    delegate void someMethod();
+	private void Awake()
+	{
+		if (Instance == null)
+		{
+			Instance = this;
+
+			Data = new DataAd();
+		}
+	}
+
+	/// <summary>
+	/// the delegate for send method like param in another method
+	/// </summary>
+	delegate void someMethod();
     /// <summary>
     /// wait some time before start some method
     /// </summary>

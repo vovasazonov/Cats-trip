@@ -17,10 +17,11 @@ public class RunGame : MonoBehaviour {
 	// Temporary data for using in script
 	private DataPlayer _temporaryDataPlayer;
 	// Set link of data player from dataplayermanager
-	private DataPlayer _dataPlayer = DataplayerManager.Instance.Data;
+	private DataPlayer _dataPlayer;
 	// The time between updates
 	private float _deltaTime;
-	// Text of score in the bottom of game
+	// Text of score in the bottom of game 
+	// (drag gameobject text score from inspector).
     [SerializeField] private Text _textScoreBlockBlack;
 	// All animals in the game
 	[SerializeField] private List<GameObject> players;
@@ -85,7 +86,9 @@ public class RunGame : MonoBehaviour {
 
     void Start()
     {
-        isPause = false;
+		_dataPlayer = DataplayerManager.Instance.Data;
+
+		isPause = false;
         isGameOver = false;
         _isSave = false;
 
@@ -546,10 +549,7 @@ public class RunGame : MonoBehaviour {
     /// </summary>
     public void SaveNewData()
     {
-		IData iData;
-
 		// Save data.
-		iData = _temporaryDataPlayer;
 		LoadSave.Save(_temporaryDataPlayer, DataplayerManager.Instance.NameFile);
 
 		// Clone data to static class of data.

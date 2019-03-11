@@ -87,19 +87,19 @@ public class ButtonClick : MonoBehaviour {
 	/// </summary>
 	public void ClickQuestsButton()
     {
-		DataQuests dataQuests = QuestsManager.instance.Data;
+		DataQuests dataQuests = QuestsManager.Instance.Data;
 
         // Get button video rewarded
         GameObject buttonRewardVideo = GameObject.Find("CanvasClassic").transform.
             Find("WindowQuests").Find("ButtonRewardVideo").gameObject;
 
-        if (dataQuests.dateQuest != DateTime.Today)
+        if (dataQuests.DateQuest != DateTime.Today)
         {
             dataQuests.SetDefoultData();
-			LoadSave.Save(dataQuests, QuestsManager.instance.NameFile);
+			LoadSave.Save(dataQuests, QuestsManager.Instance.NameFile);
         }
 
-        if(dataQuests.wasTodayRewardVideo)
+        if(dataQuests.WasTodayRewardVideo)
         {
             buttonRewardVideo.SetActive(false);
 
@@ -371,9 +371,7 @@ public class ButtonClick : MonoBehaviour {
     {
         DataplayerManager.Instance.Data.Coins += 1000;
 		//LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
-		IData instance;
-		instance = DataplayerManager.Instance.Data;
-		LoadSave.Save(instance, DataplayerManager.Instance.NameFile);
+		LoadSave.Save(DataplayerManager.Instance.Data, DataplayerManager.Instance.NameFile);
 		//update menu
 		BackgroundMenu.SetValuesInStart(animals);
     }
@@ -387,9 +385,9 @@ public class ButtonClick : MonoBehaviour {
 		dataPlayer.SetDefoultData();
 		LoadSave.Save(dataPlayer, DataplayerManager.Instance.NameFile);
 
-		DataQuests dataQuests = QuestsManager.instance.Data;
+		DataQuests dataQuests = QuestsManager.Instance.Data;
         dataQuests.SetDefoultData();
-		LoadSave.Save(dataQuests, QuestsManager.instance.NameFile);
+		LoadSave.Save(dataQuests, QuestsManager.Instance.NameFile);
 
 		DataAd dataAd = AdManager.Instance.Data;
         dataAd.SetDefoultData();
