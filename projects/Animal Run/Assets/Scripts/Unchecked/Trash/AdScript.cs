@@ -13,8 +13,10 @@ using System;
 
 public class AdScript : MonoBehaviour
 {
-    //call before deleting class
-    ~AdScript()
+	/// <summary>
+	/// Call to delete ad.
+	/// </summary>
+	~AdScript()
     {
         if (fullAdWinBool)
         {
@@ -44,15 +46,15 @@ public class AdScript : MonoBehaviour
     //identify of ads admob
     //for test banner use "ca-app-pub-3940256099942544/6300978111"
     //for production banner use "ca-app-pub-3742889557707024/4531467068";
-    private const string bannerCode1 = "ca-app-pub-3742889557707024/4531467068";
+    private const string bannerCode1 = "ca-app-pub-3940256099942544/6300978111";
     //for test InterstitialAd use "ca-app-pub-3940256099942544/1033173712"
     //for production InterstitialAd use "ca-app-pub-3742889557707024/5999222670"
-    private const string fullAdWinCode = "ca-app-pub-3742889557707024/5999222670";
+    private const string fullAdWinCode = "ca-app-pub-3940256099942544/1033173712";
     //for test video ad use "ca-app-pub-3940256099942544/5224354917"
     //for production video ad use "ca-app-pub-3742889557707024/3367322884"
-    private const string videoAdCode = "ca-app-pub-3742889557707024/3367322884";
+    private const string videoAdCode = "ca-app-pub-3940256099942544/5224354917";
 
-    private const string idTestPhoneMom = "F99D790A447C7FD3";
+    private const string idTestPhone = "F99D790A447C7FD3";
 
     InterstitialAd fullWinAd;
     BannerView bannerAd;
@@ -397,19 +399,19 @@ public class AdScript : MonoBehaviour
             }
         }
     }
-    /// <summary>
-    /// the delegate for send method like param in another method
-    /// </summary>
-    delegate void someMethod();
-    /// <summary>
-    /// wait some time before start some method
-    /// </summary>
-    /// <param name="seconds"></param>
-    /// <param name="method"></param>
-    /// <returns></returns>
-    IEnumerator Wait(float seconds, someMethod method)
-    {
-        yield return new WaitForSeconds(seconds);
-        method();
-    }
+	/// <summary>
+	/// the delegate for send method like param in another method
+	/// </summary>
+	delegate void someMethod();
+	/// <summary>
+	/// wait some time before start some method
+	/// </summary>
+	/// <param name="seconds"></param>
+	/// <param name="method"></param>
+	/// <returns></returns>
+	IEnumerator Wait(float seconds, someMethod method)
+	{
+		yield return new WaitForSeconds(seconds);
+		method();
+	}
 }

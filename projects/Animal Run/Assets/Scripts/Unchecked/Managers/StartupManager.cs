@@ -11,6 +11,10 @@ using UnityEngine.SceneManagement;
 /// Load data in load scene and using 
 /// it all active application time.
 /// </summary>
+[RequireComponent(typeof(QuestsManager))]
+[RequireComponent(typeof(DataplayerManager))]
+[RequireComponent(typeof(AdManager))]
+[RequireComponent(typeof(LocalizationManager))]
 public class StartupManager : MonoBehaviour
 {
 	//WARNING! THE SCRIPT MUST BE IN LOAD SCENE, EITHER, IN THE SCENE MAINMENU WILL BE A LOOP

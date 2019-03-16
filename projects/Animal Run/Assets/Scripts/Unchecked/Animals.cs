@@ -17,52 +17,55 @@ public class Animals {
         SetCostAnimals();
     }
 
-    //here are animals that for sale in shop
-    private List<int> animalsInShop;
+    // Animals that are for sale in shop.
+    private List<int> _animalsInShop;
     public List<int> AnimalsInShop
     {
         get
         {
-            return animalsInShop;
+            return _animalsInShop;
         }
     }
 
-    //here the cost of each animal
-    private Dictionary<int, int> costAnimals;
+    // Show the cost of animal by name of animal.
+    private Dictionary<int, int> _costAnimals;
     public Dictionary<int, int> CostAnimals
     {
         get
         {
-            return costAnimals;
+            return _costAnimals;
         }
     }
 
     /// <summary>
-    /// set all animals that will be in shop (fabric method)
+    /// Set all animals that user can buy in shop (fabric method)
     /// </summary>
     private void SetAnimalsInShop()
     {
-        animalsInShop = new List<int>();
+        _animalsInShop = new List<int>();
 
-        animalsInShop.Add((int)Animal.GrayCat);        
-        animalsInShop.Add((int)Animal.PinkRabbit);       
-        animalsInShop.Add((int)Animal.BrownHamster);
+        _animalsInShop.Add((int)Animal.GrayCat);        
+        _animalsInShop.Add((int)Animal.PinkRabbit);       
+        _animalsInShop.Add((int)Animal.BrownHamster);
         
     }
 
     /// <summary>
-    /// set the cost of each animal (fabric method)
+    /// Set the cost of each animal to dictionary (fabric method)
     /// </summary>
     private void SetCostAnimals()
     {
-        costAnimals = new Dictionary<int, int>();
+        _costAnimals = new Dictionary<int, int>();
 
-        costAnimals[(int)Animal.GrayCat] = costAnimal.grayCat;
-        costAnimals[(int)Animal.PinkRabbit] = costAnimal.pinkRabbit;
-        costAnimals[(int)Animal.BrownHamster] = costAnimal.brownHamster;
+        _costAnimals[(int)Animal.GrayCat] = CostAnimal.grayCat;
+        _costAnimals[(int)Animal.PinkRabbit] = CostAnimal.pinkRabbit;
+        _costAnimals[(int)Animal.BrownHamster] = CostAnimal.brownHamster;
     }
 
-    private struct costAnimal
+	/// <summary>
+	/// The cost of each animal.
+	/// </summary>
+    private struct CostAnimal
     {
         public const int grayCat = 0;
         public const int pinkRabbit = 1000;

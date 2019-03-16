@@ -8,6 +8,7 @@ using System.Collections;
 using UnityEngine;
 using System;
 using GoogleMobileAds.Api;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manage with ad.
@@ -16,7 +17,7 @@ using GoogleMobileAds.Api;
 /// class with data
 /// </summary>
 public class AdManager : MonoBehaviour {
-
+	
 	#region Variables
 	public static AdManager Instance;
 
@@ -36,13 +37,13 @@ public class AdManager : MonoBehaviour {
 	// Identify of ads admob
 	// For test banner use "ca-app-pub-3940256099942544/6300978111"
 	// For production banner use "ca-app-pub-3742889557707024/4531467068";
-	private const string _bannerCode1 = "ca-app-pub-3742889557707024/4531467068";
+	private const string _bannerCode1 = "ca-app-pub-3940256099942544/6300978111";
     // For test InterstitialAd use "ca-app-pub-3940256099942544/1033173712"
     // For production InterstitialAd use "ca-app-pub-3742889557707024/5999222670"
-    private const string _fullAdWinCode = "ca-app-pub-3742889557707024/5999222670";
+    private const string _fullAdWinCode = "ca-app-pub-3940256099942544/1033173712";
     // For test video ad use "ca-app-pub-3940256099942544/5224354917"
     // For production video ad use "ca-app-pub-3742889557707024/3367322884"
-    private const string _videoAdCode = "ca-app-pub-3742889557707024/3367322884";
+    private const string _videoAdCode = "ca-app-pub-3940256099942544/5224354917";
 
 	// Identity of test phone for show test ad
 	private const string _idTestPhone = "";
@@ -61,15 +62,27 @@ public class AdManager : MonoBehaviour {
 
 	// Date that helps to check amount of clicks in current date
 	private DateTime _dateToday = new DateTime();
-    #endregion
+	#endregion
 
-    #region ads
+	#region ads
+
+	private void Awake()
+	{
+		if (Instance == null)
+		{
+			Instance = this;
+
+			Data = new DataAd();
+
+			SceneManager.activeSceneChanged += OnSceneChanged;
+		}
+	}
 
 	/// <summary>
 	/// Inizialise app for ad before load ads (like banner)
 	/// only once on load application.
 	/// </summary>
-    public void InitialiseAds()
+	public void InitialiseAds()
     {
         // For ad before load ad
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -279,6 +292,7 @@ public class AdManager : MonoBehaviour {
         {
             //destroy banner
             _bannerAd.Destroy();
+
         }
 
         throw new NotImplementedException();
@@ -286,14 +300,16 @@ public class AdManager : MonoBehaviour {
 	#endregion
 	#endregion
 
-	private void Awake()
+	/// <summary>
+	/// Call when the scene changed.
+	/// </summary>
+	/// <param name="current"></param>
+	/// <param name="next"></param>
+	private void OnSceneChanged(Scene current, Scene next)
 	{
-		if (Instance == null)
-		{
-			Instance = this;
+		string currentName = current.name;
+		string nextName = next.name;
 
-			Data = new DataAd();
-		}
 	}
 
 	/// <summary>
