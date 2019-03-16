@@ -14,14 +14,13 @@ using UnityEngine.SceneManagement;
 public class StartupManager : MonoBehaviour
 {
 	//WARNING! THE SCRIPT MUST BE IN LOAD SCENE, EITHER, IN THE SCENE MAINMENU WILL BE A LOOP
+	//TO SOLVE THIS, ATTACH THIS SCRIPT TO ALL SCENES
 
 	private static StartupManager _instance;
 
     // Use this for initialization
     void Start()
     {
-		//IData iData;
-
 		// There are not object yet.
 		// Data didnt loaded yet.
 		if (_instance == null)
