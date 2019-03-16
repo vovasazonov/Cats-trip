@@ -61,9 +61,6 @@ public class AdScript : MonoBehaviour
     //date that helps to check amount of clicks in current date
     DateTime dateToday = new DateTime();
 
-    //data player
-    DataAd dataAd = new DataAd();
-
     ///*for testing uncomment*/
     //private AdRequest request = new AdRequest.Builder().AddTestDevice(AdRequest.TestDeviceSimulator).AddTestDevice(idTestPhoneMom).Build();
     ///*for testing uncomment*/
@@ -104,20 +101,17 @@ public class AdScript : MonoBehaviour
         isLoadedVideoAd = false;
         isDestroyedVideoAd = false;
 
-		//load data ad
-		dataAd = (DataAd)AdManager.Instance.Data.Clone();
-
         //get the date of today
         dateToday = DateTime.Today;
 
-        if (dateToday != dataAd.DateAd)
+        if (dateToday != AdManager.Instance.Data.DateAd)
         {
-            dataAd.DateAd = dateToday;
-            dataAd.ClicksOnAdBanner = 0;
-            dataAd.ClicksOnAdFull = 0;
+			AdManager.Instance.Data.DateAd = dateToday;
+			AdManager.Instance.Data.ClicksOnAdBanner = 0;
+			AdManager.Instance.Data.ClicksOnAdFull = 0;
 
             //LoadSaveAd.Save(dataAd);
-			LoadSave.Save(dataAd, AdManager.Instance.NameFile);
+			LoadSave.Save(AdManager.Instance.Data, AdManager.Instance.NameFile);
         }
 
         //get windows shop and profile (banner need)
@@ -264,24 +258,15 @@ public class AdScript : MonoBehaviour
 
         isDestroyedVideoAd = true;
 
-        //quests data
-        DataQuests dataQuests = new DataQuests();
-		//dataQuests = LoadSaveQuests.Load();
-		dataQuests = (DataQuests)QuestsManager.Instance.Data.Clone();
-
-        //player data
-        DataPlayer dataPlayer = new DataPlayer();
-		//dataPlayer = LoadSavePlayer.Load();
-		dataPlayer = (DataPlayer)DataplayerManager.Instance.Data.Clone();
-
-        dataQuests.WasTodayRewardVideo = true;
+		QuestsManager.Instance.Data.WasTodayRewardVideo = true;
 		//LoadSaveQuests.Save(dataQuests);
-		LoadSave.Save(dataQuests, QuestsManager.Instance.NameFile);
+		LoadSave.Save(QuestsManager.Instance.Data, 
+			QuestsManager.Instance.NameFile);
 
-        dataPlayer.Coins += (int)e.Amount;
+		DataplayerManager.Instance.Data.Coins += (int)e.Amount;
 		//LoadSavePlayer.Save(dataPlayer);
-		LoadSave.Save(dataPlayer, DataplayerManager.Instance.NameFile);
-
+		LoadSave.Save(DataplayerManager.Instance.Data, 
+			DataplayerManager.Instance.NameFile);
 
         //update menu 
         Animals animals = new Animals();
@@ -306,8 +291,8 @@ public class AdScript : MonoBehaviour
     //call when full ad clicked
     private void FullWinAd_OnAdOpening(object sender, System.EventArgs e)
     {
-        //add click
-        dataAd.ClicksOnAdFull++;
+		//add click
+		AdManager.Instance.Data.ClicksOnAdFull++;
 
         //delete ad 
         fullWinAd.Destroy();
@@ -315,7 +300,7 @@ public class AdScript : MonoBehaviour
 
 		//save click to file
 		//LoadSaveAd.Save(dataAd);
-		LoadSave.Save(dataAd, AdManager.Instance.NameFile);
+		LoadSave.Save(AdManager.Instance.Data, AdManager.Instance.NameFile);
 
         throw new System.NotImplementedException();
     }
@@ -335,7 +320,7 @@ public class AdScript : MonoBehaviour
         isLoadedAdFull = true;
 
         //if there is less clicks than 3, show ad
-        if(dataAd.ClicksOnAdFull > 3)
+        if(AdManager.Instance.Data.ClicksOnAdFull > 3)
         {
             //delete ad
             fullWinAd.Destroy();
@@ -362,9 +347,9 @@ public class AdScript : MonoBehaviour
         bannerAd.Destroy();
         isDestroyedBanner = true;
 
-        dataAd.ClicksOnAdBanner++;
+		AdManager.Instance.Data.ClicksOnAdBanner++;
 		//LoadSaveAd.Save(dataAd);
-		LoadSave.Save(dataAd, AdManager.Instance.NameFile);
+		LoadSave.Save(AdManager.Instance.Data, AdManager.Instance.NameFile);
 
         throw new NotImplementedException();
     }
@@ -374,7 +359,7 @@ public class AdScript : MonoBehaviour
         bannerAd.Hide();
         isLoadedBanner = true;
 
-        if(dataAd.ClicksOnAdBanner >= 3)
+        if(AdManager.Instance.Data.ClicksOnAdBanner >= 3)
         {
             //destroy banner
             bannerAd.Destroy();

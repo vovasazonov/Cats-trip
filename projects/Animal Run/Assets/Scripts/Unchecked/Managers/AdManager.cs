@@ -265,8 +265,7 @@ public class AdManager : MonoBehaviour {
         _bannerAd.Destroy();
 
         Data.ClicksOnAdBanner++;
-		IData instance;
-		instance = Data;
+
 		LoadSave.Save(Data, NameFile);
 
 		throw new NotImplementedException();

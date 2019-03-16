@@ -24,12 +24,11 @@ public class ButtonClick : MonoBehaviour {
 	/// </summary>
     public void ClickLaterRateButton()
     {
-		DataAd data = AdManager.Instance.Data;
 
-        data.ClicksOnRestartButton = 0;
+		AdManager.Instance.Data.ClicksOnRestartButton = 0;
 
 		// Save
-		LoadSave.Save(data, AdManager.Instance.NameFile);
+		LoadSave.Save(AdManager.Instance.Data, AdManager.Instance.NameFile);
 
         // Hide rate window
         GameObject.Find("CanvasClassic").transform.
@@ -42,13 +41,12 @@ public class ButtonClick : MonoBehaviour {
 	/// </summary>
     public void ClickRateButton()
     {
-		DataAd data = AdManager.Instance.Data;
 
-		data.ClicksOnRestartButton = 0;
-        data.IsRatedApp = true;
+		AdManager.Instance.Data.ClicksOnRestartButton = 0;
+		AdManager.Instance.Data.IsRatedApp = true;
 
 		// Save
-		LoadSave.Save(data, AdManager.Instance.NameFile);
+		LoadSave.Save(AdManager.Instance.Data, AdManager.Instance.NameFile);
 
 		// Hide rate window
 		GameObject.Find("CanvasClassic").transform.
@@ -87,19 +85,19 @@ public class ButtonClick : MonoBehaviour {
 	/// </summary>
 	public void ClickQuestsButton()
     {
-		DataQuests dataQuests = QuestsManager.Instance.Data;
 
         // Get button video rewarded
         GameObject buttonRewardVideo = GameObject.Find("CanvasClassic").transform.
             Find("WindowQuests").Find("ButtonRewardVideo").gameObject;
 
-        if (dataQuests.DateQuest != DateTime.Today)
+        if (QuestsManager.Instance.Data.DateQuest != DateTime.Today)
         {
-            dataQuests.SetDefoultData();
-			LoadSave.Save(dataQuests, QuestsManager.Instance.NameFile);
+			QuestsManager.Instance.Data.SetDefoultData();
+			LoadSave.Save(QuestsManager.Instance.Data, 
+				QuestsManager.Instance.NameFile);
         }
 
-        if(dataQuests.WasTodayRewardVideo)
+        if(QuestsManager.Instance.Data.WasTodayRewardVideo)
         {
             buttonRewardVideo.SetActive(false);
 
@@ -121,18 +119,17 @@ public class ButtonClick : MonoBehaviour {
 	public void ClickMusicButton(GameObject buttonMusic)
     {
         Animals animals = new Animals();
-        DataPlayer dataPlayer = DataplayerManager.Instance.Data;
 
         if(buttonMusic.GetComponent<Toggle>().isOn == true)
         {
-            dataPlayer.IsMusicMainMenu = true;
+			DataplayerManager.Instance.Data.IsMusicMainMenu = true;
         }
         else
         {
-            dataPlayer.IsMusicMainMenu = false;
+			DataplayerManager.Instance.Data.IsMusicMainMenu = false;
         }
 
-		LoadSave.Save(dataPlayer, DataplayerManager.Instance.NameFile);
+		LoadSave.Save(DataplayerManager.Instance.Data, DataplayerManager.Instance.NameFile);
 
         BackgroundMenu.SetValuesInStart(animals);
     }
@@ -158,12 +155,12 @@ public class ButtonClick : MonoBehaviour {
 	/// </summary>
 	public void Restart()
     {
-		DataAd dataAd = AdManager.Instance.Data;
 
-        if (!dataAd.IsRatedApp)
+        if (!AdManager.Instance.Data.IsRatedApp)
         {
-            dataAd.ClicksOnRestartButton++;
-			LoadSave.Save(dataAd, AdManager.Instance.NameFile);
+			AdManager.Instance.Data.ClicksOnRestartButton++;
+			LoadSave.Save(AdManager.Instance.Data, 
+				AdManager.Instance.NameFile);
         }
 
         SceneManager.LoadScene("GameZone");
@@ -381,17 +378,16 @@ public class ButtonClick : MonoBehaviour {
 	/// </summary>
     public void DefDat()
     {
-        DataPlayer dataPlayer = DataplayerManager.Instance.Data;
-		dataPlayer.SetDefoultData();
-		LoadSave.Save(dataPlayer, DataplayerManager.Instance.NameFile);
+		DataplayerManager.Instance.Data.SetDefoultData();
+		LoadSave.Save(DataplayerManager.Instance.Data, 
+			DataplayerManager.Instance.NameFile);
 
-		DataQuests dataQuests = QuestsManager.Instance.Data;
-        dataQuests.SetDefoultData();
-		LoadSave.Save(dataQuests, QuestsManager.Instance.NameFile);
+		QuestsManager.Instance.Data.SetDefoultData();
+		LoadSave.Save(QuestsManager.Instance.Data, 
+			QuestsManager.Instance.NameFile);
 
-		DataAd dataAd = AdManager.Instance.Data;
-        dataAd.SetDefoultData();
-		LoadSave.Save(dataAd, AdManager.Instance.NameFile);
+		AdManager.Instance.Data.SetDefoultData();
+		LoadSave.Save(AdManager.Instance.Data, AdManager.Instance.NameFile);
 
         //Update menu
         BackgroundMenu.SetValuesInStart(animals);

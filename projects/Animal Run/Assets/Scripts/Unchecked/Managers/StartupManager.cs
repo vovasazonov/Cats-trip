@@ -28,17 +28,19 @@ public class StartupManager : MonoBehaviour
 		{
 			_instance = this;
 
+			DataPlayer dataPlayer = new DataPlayer();
+			DataQuests dataQuests = new DataQuests();
+			DataAd dataAd = new DataAd();
+
 			// Load DataPlayer
-			DataPlayer dataPlayer = DataplayerManager.Instance.Data;
 			LoadSave.Load(ref dataPlayer, DataplayerManager.Instance.NameFile);
-
+			DataplayerManager.Instance.Data = dataPlayer;
 			// Load AdData
-			DataAd dataAd = AdManager.Instance.Data;
 			LoadSave.Load(ref dataAd, AdManager.Instance.NameFile);
-
+			AdManager.Instance.Data = dataAd;
 			// Load dataQuests
-			DataQuests dataQuests = QuestsManager.Instance.Data;
 			LoadSave.Load(ref dataQuests, QuestsManager.Instance.NameFile);
+			QuestsManager.Instance.Data = dataQuests;
 
 			// Get languege
 			/* Change to next alghorithm:

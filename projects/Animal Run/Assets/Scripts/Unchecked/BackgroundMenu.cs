@@ -384,26 +384,25 @@ public class BackgroundMenu : MonoBehaviour {
     /// <param name="animals">inclde an object with cost and id of animals</param>
     static public void SetValuesInStart(Animals animals)
     {
-		DataPlayer dataPlayer = DataplayerManager.Instance.Data;
-
         // Check if the list has animals
-        if (dataPlayer.BoughtAnimals == null)
+        if (DataplayerManager.Instance.Data.BoughtAnimals == null)
         {
 
-			dataPlayer.BoughtAnimals = new List<int>();
-			dataPlayer.BoughtAnimals.Add((int)Animal.GrayCat);
-			dataPlayer.CurrentAnimal = (int)Animal.GrayCat;
+			DataplayerManager.Instance.Data.BoughtAnimals = new List<int>();
+			DataplayerManager.Instance.Data.BoughtAnimals.Add((int)Animal.GrayCat);
+			DataplayerManager.Instance.Data.CurrentAnimal = (int)Animal.GrayCat;
 
 			// Save information
-			LoadSave.Save(dataPlayer, DataplayerManager.Instance.NameFile);
+			LoadSave.Save(DataplayerManager.Instance.Data, 
+				DataplayerManager.Instance.NameFile);
         }
         
         // Set the best score in block in main menu
         GameObject.Find("TextScoreNum").GetComponent<Text>().text =
-			dataPlayer.Score.ToString();
+			DataplayerManager.Instance.Data.Score.ToString();
 
         // Set music
-        if (dataPlayer.IsMusicMainMenu)
+        if (DataplayerManager.Instance.Data.IsMusicMainMenu)
         {
             GameObject.Find("CanvasClassic").transform.Find("ButtonMusic").gameObject.
             GetComponent<Toggle>().isOn = true;
@@ -419,7 +418,8 @@ public class BackgroundMenu : MonoBehaviour {
         #region set values in shop
         // Set count of money in block in shop
         GameObject.Find("CanvasClassic").transform.Find("WindowShop").Find("BlockShowMoney").
-            Find("Text").GetComponent<Text>().text = dataPlayer.Coins.ToString();
+            Find("Text").GetComponent<Text>().text = 
+			DataplayerManager.Instance.Data.Coins.ToString();
 
         // Find section of animals in canvas classic
         GameObject sectionAnimals = GameObject.Find("CanvasClassic").
@@ -432,7 +432,8 @@ public class BackgroundMenu : MonoBehaviour {
 				Find(animals.AnimalsInShop[i].ToString()).gameObject;
 
             // Set cost of animal, set Vi (if bought)
-            if (dataPlayer.BoughtAnimals.Contains(animals.AnimalsInShop[i]))
+            if (DataplayerManager.Instance.Data.
+				BoughtAnimals.Contains(animals.AnimalsInShop[i]))
             {
                 // Costumer see vi
                 anAnimal.transform.Find("Vi").gameObject.SetActive(true);
@@ -451,7 +452,7 @@ public class BackgroundMenu : MonoBehaviour {
                 anAnimal.GetComponent<Toggle>().interactable = true;
 
                 // Show cost of animal with green block if costumer has enogh money
-                if (dataPlayer.Coins >= animals.CostAnimals[i])
+                if (DataplayerManager.Instance.Data.Coins >= animals.CostAnimals[i])
                 {
                     // Show green block
                     anAnimal.transform.Find("BlockGreen").gameObject.SetActive(true);
@@ -490,13 +491,13 @@ public class BackgroundMenu : MonoBehaviour {
 				Find(animals.AnimalsInShop[i].ToString()).gameObject;
 
             // Do monipulations if the animal bought
-            if (dataPlayer.BoughtAnimals.Contains(i))
+            if (DataplayerManager.Instance.Data.BoughtAnimals.Contains(i))
             {
                 // Show icon of animal in profile
                 anAnimal.SetActive(true);
 
                 // Set vi and another when the icon is current animal
-                if (dataPlayer.CurrentAnimal == i)
+                if (DataplayerManager.Instance.Data.CurrentAnimal == i)
                 {
                     anAnimal.GetComponent<Toggle>().isOn = true;
                     anAnimal.GetComponent<Toggle>().interactable = false;

@@ -19,7 +19,7 @@ public class DataplayerManager : MonoBehaviour {
 	// Data that keeping information.
 	public DataPlayer Data { get; set; }
 	// Name of file.
-	private string _nameFile = "playerInfo.dat";
+	private const string _nameFile = "playerInfo.dat";
 	public string NameFile
 	{
 		get

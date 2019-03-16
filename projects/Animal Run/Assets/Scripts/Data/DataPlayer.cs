@@ -21,7 +21,7 @@ public class DataPlayer : IData{
 	// The animal that run in the game
 	public int CurrentAnimal { get; set; }
 	// All animals that player bought
-	private List<int> _boughtAnimals = new List<int>();
+	private List<int> _boughtAnimals;
 	public List<int> BoughtAnimals
 	{
 		get

@@ -16,8 +16,6 @@ public class RunGame : MonoBehaviour {
 
 	// Temporary data for using in script
 	private DataPlayer _temporaryDataPlayer;
-	// Set link of data player from dataplayermanager
-	private DataPlayer _dataPlayer;
 	// The time between updates
 	private float _deltaTime;
 	// Text of score in the bottom of game 
@@ -86,14 +84,12 @@ public class RunGame : MonoBehaviour {
 
     void Start()
     {
-		_dataPlayer = DataplayerManager.Instance.Data;
-
 		isPause = false;
         isGameOver = false;
         _isSave = false;
 
 		// Clone data to temporary data.
-		_temporaryDataPlayer = (DataPlayer)_dataPlayer.Clone();
+		_temporaryDataPlayer = (DataPlayer)DataplayerManager.Instance.Data.Clone();
 
 		_speed = 3f;
         _score = 0;
@@ -105,7 +101,7 @@ public class RunGame : MonoBehaviour {
         InputAreasListsToGeneralList();
 
         // Set music
-        if (_dataPlayer.IsMusicMainMenu)
+        if (DataplayerManager.Instance.Data.IsMusicMainMenu)
         {
             GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = true;
         }
@@ -539,7 +535,7 @@ public class RunGame : MonoBehaviour {
     /// <returns></returns>
     public bool EqualsTwoDataPlayer()
     {
-        if (_dataPlayer == _temporaryDataPlayer)
+        if (DataplayerManager.Instance.Data == _temporaryDataPlayer)
             return true;
         else
             return false;
@@ -553,7 +549,7 @@ public class RunGame : MonoBehaviour {
 		LoadSave.Save(_temporaryDataPlayer, DataplayerManager.Instance.NameFile);
 
 		// Clone data to static class of data.
-        _dataPlayer = (DataPlayer)_temporaryDataPlayer.Clone();
+		DataplayerManager.Instance.Data = (DataPlayer)_temporaryDataPlayer.Clone();
     }
 }
 
