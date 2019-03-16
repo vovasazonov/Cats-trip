@@ -653,7 +653,6 @@ GameObject:
   m_Component:
   - component: {fileID: 536896364}
   - component: {fileID: 536896365}
-  - component: {fileID: 536896366}
   m_Layer: 0
   m_Name: RunScriptsGame
   m_TagString: Untagged
@@ -731,20 +730,6 @@ MonoBehaviour:
   - {fileID: 1636516545741148, guid: 2e5e848b13b7aeb4396c4d54651f0788, type: 2}
   - {fileID: 1269878623028006, guid: d08baa5c58c842f4f943ecaf9faa1bd1, type: 2}
   - {fileID: 1809674940808808, guid: 3d5acfc02fad48247a7a8757bc5c3a29, type: 2}
---- !u!114 &536896366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 536896363}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 522b9a90b21216542a78ef07f58ae2e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fullAdWinBool: 1
-  bannerCode1Bool: 0
-  videoAdBool: 0
 --- !u!1 &613406617
 GameObject:
   m_ObjectHideFlags: 0

@@ -126,7 +126,10 @@ public class RunGame : MonoBehaviour {
         }
     }
 
-    void Update()
+	// Events
+	public static UnityEngine.Events.UnityEvent GameOverEvent;
+
+	void Update()
     {
         _deltaTime = Time.deltaTime;
 
@@ -134,9 +137,16 @@ public class RunGame : MonoBehaviour {
         {
             //saveData
             if (!_isSave)
-            {
-                // Do animation sit of animal
-                _player.GetComponent<Animator>().SetBool("StopToSit",true);
+			{
+				if (GameOverEvent == null)
+				{
+					GameOverEvent = new UnityEngine.Events.UnityEvent();
+				}
+
+				GameOverEvent.Invoke();
+
+				// Do animation sit of animal
+				_player.GetComponent<Animator>().SetBool("StopToSit",true);
 
                 // Set off music
                 GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = false;

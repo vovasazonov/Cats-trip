@@ -62,6 +62,21 @@ public class AdManager : MonoBehaviour {
 
 	// Date that helps to check amount of clicks in current date
 	private DateTime _dateToday = new DateTime();
+
+	//bool values of banner
+	private bool isSentRequestBanner;
+	private bool _isLoadedBanner;
+	private bool _isDestroyedBanner;
+
+	//bool values of full ad
+	private bool isShowedFullAd;
+	private bool isLoadedAdFull;
+	private bool _isDestroyedAdFull;
+
+	//bool values of video ad
+	private bool isSentRequestVideoAd;
+	private bool _isLoadedVideoAd;
+	private bool _isDestroyedVideoAd;
 	#endregion
 
 	#region ads
@@ -75,6 +90,10 @@ public class AdManager : MonoBehaviour {
 			Data = new DataAd();
 
 			SceneManager.activeSceneChanged += OnSceneChanged;
+
+			InitialiseAds();
+
+			PrepareVideoAd();
 		}
 	}
 
@@ -174,131 +193,214 @@ public class AdManager : MonoBehaviour {
 
     private void VideoAd_OnAdFailedToLoad(object sender, AdFailedToLoadEventArgs e)
     {
-        //destroy object
+		_isDestroyedVideoAd = true;
+		_isLoadedVideoAd = false;
 
-        throw new NotImplementedException();
+		GameObject.Find("CanvasClassic").transform.Find("WindowQuests").
+				Find("PanelBlack").gameObject.SetActive(false);
+
+		//show msg that there are problems with load ad
+		GameObject.Find("CanvasClassic").transform.Find("WindowQuests").
+			Find("MsgFaildLoadVideo").gameObject.SetActive(true);
+
+		//hide msg that there are problems with load ad
+		StartCoroutine(Wait(5, () => {
+			GameObject.Find("CanvasClassic").transform.Find("WindowQuests").
+				Find("MsgFaildLoadVideo").gameObject.SetActive(false);
+		}));
+
+		throw new NotImplementedException();
     }
 
+	/// <summary>
+	/// Call when video loaded and ready to show to user.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
     private void VideoAd_OnAdLoaded(object sender, EventArgs e)
     {
+		_isLoadedVideoAd = true;
 
-        throw new NotImplementedException();
+		throw new NotImplementedException();
     }
+
+	/// <summary>
+	/// Call when user finished watch video ad for get reward.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
     private void VideoAd_OnAdRewarded(object sender, Reward e)
     {
-        //GameObject.Find("CanvasClassic").transform.Find("WindowQuests").
-        //Find("PanelBlack").gameObject.SetActive(false);
+		//GameObject.Find("CanvasClassic").transform.Find("WindowQuests").
+		//Find("PanelBlack").gameObject.SetActive(false);
 
-        //isDestroyedVideoAd = true;
+		//isDestroyedVideoAd = true;
 
-        ////quests data
-        //DataQuests dataQuests = new DataQuests();
-        //dataQuests = LoadSaveQuests.Load();
+		////quests data
+		//DataQuests dataQuests = new DataQuests();
+		//dataQuests = LoadSaveQuests.Load();
 
-        ////player data
-        //DataPlayer dataPlayer = new DataPlayer();
-        //dataPlayer = LoadSavePlayer.Load();
+		////player data
+		//DataPlayer dataPlayer = new DataPlayer();
+		//dataPlayer = LoadSavePlayer.Load();
 
-        //dataQuests.wasTodayRewardVideo = true;
-        //LoadSaveQuests.Save(dataQuests);
+		//dataQuests.wasTodayRewardVideo = true;
+		//LoadSaveQuests.Save(dataQuests);
 
-        //dataPlayer.coins += (int)e.Amount;
-        //LoadSavePlayer.Save(dataPlayer);
+		//dataPlayer.coins += (int)e.Amount;
+		//LoadSavePlayer.Save(dataPlayer);
 
-        ////update menu 
-        //Animals animals = new Animals();
-        //BackgroundMenu.setValuesInStart(animals);
+		////update menu 
+		//Animals animals = new Animals();
+		//BackgroundMenu.setValuesInStart(animals);
 
-        throw new NotImplementedException();
-    }
-    #endregion
+		GameObject.Find("CanvasClassic").transform.Find("WindowQuests").
+			Find("PanelBlack").gameObject.SetActive(false);
 
-    #region events of Interstitial ad
-    //call when full ad closed
-    private void FullWinAd_OnAdClosed(object sender, EventArgs e)
+		_isDestroyedVideoAd = true;
+
+		QuestsManager.Instance.Data.WasTodayRewardVideo = true;
+		//LoadSaveQuests.Save(dataQuests);
+		LoadSave.Save(QuestsManager.Instance.Data,
+			QuestsManager.Instance.NameFile);
+
+		DataplayerManager.Instance.Data.Coins += (int)e.Amount;
+		//LoadSavePlayer.Save(dataPlayer);
+		LoadSave.Save(DataplayerManager.Instance.Data,
+			DataplayerManager.Instance.NameFile);
+
+		//update menu 
+		Animals animals = new Animals();
+		BackgroundMenu.SetValuesInStart(animals);
+
+		throw new NotImplementedException();
+	}
+	#endregion
+
+	#region events of Interstitial ad
+	/// <summary>
+	/// Call when full ad closed.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void FullWinAd_OnAdClosed(object sender, EventArgs e)
     {
-        //destroy ad
+		// Destrou ad.
+		_fullWinAd.Destroy();
+		_isDestroyedAdFull = true;
 
-        throw new NotImplementedException();
+		throw new NotImplementedException();
     }
 
-    //call when full ad clicked
-    private void FullWinAd_OnAdOpening(object sender, System.EventArgs e)
+	/// <summary>
+	/// Call when user clicked on full ad.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void FullWinAd_OnAdOpening(object sender, System.EventArgs e)
     {
         //add click
         Data.ClicksOnAdFull++;
 
         //delete ad 
         _fullWinAd.Destroy();
+		_isDestroyedAdFull = true;
 
-        //save click to file
+		//save click to file
 		LoadSave.Save(Data, NameFile);
 
         throw new System.NotImplementedException();
     }
-    //call on full ad failed to load
-    private void FullWinAd_OnAdFailedToLoad(object sender, AdFailedToLoadEventArgs e)
+	/// <summary>
+	/// Call on full ad failed to load.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void FullWinAd_OnAdFailedToLoad(object sender, AdFailedToLoadEventArgs e)
     {
         //destroy ad
         _fullWinAd.Destroy();
+		_isDestroyedAdFull = true;
 
-        throw new System.NotImplementedException();
+		throw new System.NotImplementedException();
 
     }
-    //call when full ad loaded
-    private void FullWinAd_OnAdLoaded(object sender, System.EventArgs e)
+	/// <summary>
+	/// Call when full ad loaded.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void FullWinAd_OnAdLoaded(object sender, System.EventArgs e)
     {
         //if there is less clicks than 3, show ad
         if (Data.ClicksOnAdFull > 3)
         {
-            //destroy ad
+            // Destroy ad
             _fullWinAd.Destroy();
+			_isDestroyedAdFull = true;
 
-            //show another ad or my ad
+			//show another ad or my ad
 
-        }
+		}
 
         throw new System.NotImplementedException();
     }
-    #endregion
+	#endregion
 
-    #region events of banner ad
-    //call when banner failed to load
-    private void BannerAd_OnAdFailedToLoad(object sender, AdFailedToLoadEventArgs e)
+	#region events of banner ad
+	/// <summary>
+	/// Call when banner failed to load.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void BannerAd_OnAdFailedToLoad(object sender, AdFailedToLoadEventArgs e)
     {
-        //destroy ad
-        _bannerAd.Destroy();
+		_isLoadedBanner = false;
+		//destroy ad
+		_bannerAd.Destroy();
+		_isDestroyedBanner = true;
 
-        throw new NotImplementedException();
+		throw new NotImplementedException();
     }
-    //call on banner clicked
-    private void BannerAd_OnAdOpening(object sender, EventArgs e)
+	/// <summary>
+	/// Call when user cliked on banner.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void BannerAd_OnAdOpening(object sender, EventArgs e)
     {
-        //destroy ad
+        // Destroy ad
         _bannerAd.Destroy();
+		_isDestroyedBanner = true;
 
-        Data.ClicksOnAdBanner++;
+		Data.ClicksOnAdBanner++;
 
 		LoadSave.Save(Data, NameFile);
 
 		throw new NotImplementedException();
     }
-    //call when banner loaded
-    private void BannerAd_OnAdLoaded(object sender, EventArgs e)
+	// Call when banner loaded.
+	private void BannerAd_OnAdLoaded(object sender, EventArgs e)
     {
         _bannerAd.Hide();
+		_isLoadedBanner = true;
 
-        if (Data.ClicksOnAdBanner >= 3)
+		if (Data.ClicksOnAdBanner >= 3)
         {
             //destroy banner
             _bannerAd.Destroy();
-
-        }
+			_isDestroyedBanner = true;
+		}
 
         throw new NotImplementedException();
     }
 	#endregion
 	#endregion
+
+	// Ads you want to show to user.
+	private bool _fullAdWinBool;
+	private bool _bannerCode1Bool;
+	private bool _videoAdBool;
 
 	/// <summary>
 	/// Call when the scene changed.
@@ -309,20 +411,216 @@ public class AdManager : MonoBehaviour {
 	{
 		string currentName = current.name;
 		string nextName = next.name;
+		
+		// Destroy ads when scene are changing.
+		if (_fullAdWinBool)
+		{
+			if (!_isDestroyedAdFull)
+				_fullWinAd.Destroy();
 
+			_fullAdWinBool = false;
+		}
+		if (_bannerCode1Bool)
+		{
+			//if it is not destroyed 
+			if (!_isDestroyedBanner)
+				_bannerAd.Destroy();
+
+			_bannerCode1Bool = false;
+		}
+		if (_videoAdBool)
+		{
+			_videoAdBool = false;
+		}
+
+		switch (next.name)
+		{
+			case "GameZone":
+				PrepareFullAd();
+				break;
+			case "MainMenu":
+				ShowBannerCode1();
+				break;
+			default:
+				break;
+		}
+
+		MethodAwakeAd();
 	}
 
+	private void Update()
+	{
+		if (_fullAdWinBool)
+		{
+			if (RunGame.isGameOver)
+			{
+				if (!isShowedFullAd)
+				{
+					//show black alpha channel window if loaded and don't destroyed
+					if (!_isDestroyedAdFull && isLoadedAdFull)
+					{
+						//show black alpha block
+						GameObject.Find("Canvas").transform.Find("PanelBlack").gameObject.SetActive(true);
+
+						StartCoroutine(Wait(2, () =>
+						{
+							//show ad
+							_fullWinAd.Show();
+							//hide black alpha block
+							GameObject.Find("Canvas").transform.Find("PanelBlack").gameObject.SetActive(false);
+						}));
+
+					}
+
+
+					isShowedFullAd = true;
+				}
+			}
+		}
+		if (_bannerCode1Bool)
+		{
+			//load ad
+			if (!isSentRequestBanner)
+			{
+				_bannerAd.LoadAd(_request);
+				isSentRequestBanner = true;
+			}
+
+			if (_isLoadedBanner && !_isDestroyedBanner)
+			{
+				if (_profileWin.activeInHierarchy || _shopWin.activeInHierarchy)
+					_bannerAd.Show();
+				else
+					_bannerAd.Hide();
+			}
+			else
+			{
+				//show my banner (not admob)
+			}
+		}
+
+		if (_videoAdBool)
+		{
+
+		}
+	}
+
+	GameObject _shopWin;
+	GameObject _profileWin;
+
+	private void MethodAwakeAd()
+	{
+
+		//set start values in bools values
+		isShowedFullAd = false;
+		isSentRequestBanner = false;
+		_isLoadedBanner = false;
+		_isDestroyedBanner = false;
+		isLoadedAdFull = false;
+		_isDestroyedAdFull = false;
+		isSentRequestVideoAd = false;
+		_isLoadedVideoAd = false;
+		_isDestroyedVideoAd = false;
+
+		//get the date of today
+		_dateToday = DateTime.Today;
+
+		if (_dateToday != AdManager.Instance.Data.DateAd)
+		{
+			AdManager.Instance.Data.DateAd = _dateToday;
+			AdManager.Instance.Data.ClicksOnAdBanner = 0;
+			AdManager.Instance.Data.ClicksOnAdFull = 0;
+
+			//LoadSaveAd.Save(dataAd);
+			LoadSave.Save(AdManager.Instance.Data, AdManager.Instance.NameFile);
+		}
+
+		//get windows shop and profile (banner need)
+		if (_bannerCode1Bool)
+		{
+			_shopWin = GameObject.Find("CanvasClassic").transform.Find("WindowShop").gameObject;
+			_profileWin = GameObject.Find("CanvasClassic").transform.Find("WindowProfile").gameObject;
+		}
+	}
 	/// <summary>
-	/// the delegate for send method like param in another method
+	/// Show full ad.
 	/// </summary>
-	delegate void someMethod();
+	private void PrepareFullAd()
+	{
+		_fullWinAd = new InterstitialAd(_fullAdWinCode);
+
+		_fullWinAd.OnAdOpening += FullWinAd_OnAdOpening;
+		_fullWinAd.OnAdLoaded += FullWinAd_OnAdLoaded;
+		_fullWinAd.OnAdFailedToLoad += FullWinAd_OnAdFailedToLoad;
+		_fullWinAd.OnAdClosed += FullWinAd_OnAdClosed;
+
+		//load ad
+		//sent request and load ad
+		_fullWinAd.LoadAd(_request);
+
+		_fullAdWinBool = true;
+	}
+	/// <summary>
+	/// Show banner ad.
+	/// </summary>
+	private void ShowBannerCode1()
+	{
+		_bannerAd = new BannerView(_bannerCode1, AdSize.Banner, AdPosition.Bottom);
+
+		_bannerAd.OnAdLoaded += BannerAd_OnAdLoaded;
+		_bannerAd.OnAdFailedToLoad += BannerAd_OnAdFailedToLoad;
+		_bannerAd.OnAdOpening += BannerAd_OnAdOpening;
+
+		_bannerCode1Bool = true;
+	}
+	/// <summary>
+	/// .
+	/// </summary>
+	private void PrepareVideoAd()
+	{
+		_videoAd = RewardBasedVideoAd.Instance;
+		_videoAd.OnAdRewarded += VideoAd_OnAdRewarded;
+		_videoAd.OnAdLoaded += VideoAd_OnAdLoaded;
+		_videoAd.OnAdFailedToLoad += VideoAd_OnAdFailedToLoad;
+
+		_videoAdBool = true;
+	}
+
+	private void OnButtonRewardedVideoAd()
+	{
+		_videoAdBool = true;
+
+		if (_isDestroyedVideoAd)
+		{
+			isSentRequestVideoAd = false;
+			_isDestroyedVideoAd = false;
+		}
+
+		if (!isSentRequestVideoAd)
+		{
+			_videoAd.LoadAd(_request, _videoAdCode);
+			isSentRequestVideoAd = true;
+		}
+
+		//show panel black wait to ad
+		GameObject.Find("CanvasClassic").transform.Find("WindowQuests").
+			Find("PanelBlack").gameObject.SetActive(true);
+
+		//show video
+		if (_isLoadedVideoAd && !_isDestroyedVideoAd)
+		{
+			_videoAd.Show();
+		}
+		
+	}
+	delegate void SomeMethod();
     /// <summary>
-    /// wait some time before start some method
+    /// Wait some time before start some method.
     /// </summary>
     /// <param name="seconds"></param>
     /// <param name="method"></param>
     /// <returns></returns>
-    IEnumerator Wait(float seconds, someMethod method)
+    IEnumerator Wait(float seconds, SomeMethod method)
     {
         yield return new WaitForSeconds(seconds);
         method();
