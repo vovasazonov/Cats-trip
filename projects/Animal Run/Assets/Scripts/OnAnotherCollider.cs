@@ -29,7 +29,7 @@ public class OnAnotherCollider : MonoBehaviour {
         }
         else
         {
-            RunGame.isGameOver = true;
+            RunGame.IsGameOver = true;
         }
     }
 }

@@ -54,7 +54,7 @@ public class StartupManager : MonoBehaviour
 			 *	Befor change to alghorithm, be sure that font 
 			 *	suppor languages
 			 */
-			LocalizationManager.Instance.LoadLocalizedText("localizedText_en.json");
+			LocalizationManager.Instance.SetLanguage("localizedTextEn.json");
 
 			// Load scen when all data loaded
 			SceneManager.LoadScene("MainMenu");

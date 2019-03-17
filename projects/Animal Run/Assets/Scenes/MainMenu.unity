@@ -3684,8 +3684,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: onButtonRewardedVideoAd
+      - m_Target: {fileID: 1444334540}
+        m_MethodName: OnButtonRewardedVideoAd
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5547,6 +5547,12 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a46a9b050faa58846affa6301a944d8e, type: 2}
   m_IsPrefabAsset: 0
+--- !u!114 &1444334540 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114845213275412918, guid: a46a9b050faa58846affa6301a944d8e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1444334539}
+  m_Script: {fileID: 11500000, guid: 94f04c20029479b4880b6ce0f15a7c70, type: 3}
 --- !u!1 &1464954672
 GameObject:
   m_ObjectHideFlags: 0

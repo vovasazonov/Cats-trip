@@ -20,7 +20,7 @@ public class SwipePlayer : MonoBehaviour {
 
     void Update()
     {
-        if (!RunGame.isGameOver && Time.timeScale != 0)
+        if (!RunGame.IsGameOver && Time.timeScale != 0)
         {
             foreach (Touch touch in Input.touches)
             {

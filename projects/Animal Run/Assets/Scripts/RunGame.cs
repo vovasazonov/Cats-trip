@@ -52,7 +52,7 @@ public class RunGame : MonoBehaviour {
 	// Skin that user choosed
 	private int _currentPlayer;
 
-    static public bool isGameOver { get; set; }             
+    static public bool IsGameOver { get; set; }             
     static public bool isPause { get; set; }      
 	// True if the file alreday saved
     private bool _isSave;
@@ -85,7 +85,7 @@ public class RunGame : MonoBehaviour {
     void Start()
     {
 		isPause = false;
-        isGameOver = false;
+        IsGameOver = false;
         _isSave = false;
 
 		// Clone data to temporary data.
@@ -133,7 +133,7 @@ public class RunGame : MonoBehaviour {
     {
         _deltaTime = Time.deltaTime;
 
-        if (isGameOver)
+        if (IsGameOver)
         {
             //saveData
             if (!_isSave)
@@ -253,7 +253,7 @@ public class RunGame : MonoBehaviour {
 
         // Check if player input escape menu or home (on android)
         if((Input.GetKey(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Menu) || 
-            Input.GetKeyDown(KeyCode.Home)) && !isGameOver)
+            Input.GetKeyDown(KeyCode.Home)) && !IsGameOver)
         {
             GameObject.Find("Canvas").transform.Find("PauseWindow").gameObject.SetActive(true);
 

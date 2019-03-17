@@ -11,15 +11,15 @@ using UnityEngine;
 /// namefile,
 /// class with data
 /// </summary>
-public class QuestsManager : MonoBehaviour {
+public class DataplayerManager : MonoBehaviour {
 
 	#region Variables
-	public static QuestsManager Instance;
+    public static DataplayerManager Instance;
 
 	// Data that keeping information.
-	public DataQuests Data { get; set; }
+	public DataPlayer Data { get; set; }
 	// Name of file.
-	private string _nameFile = "questsInfo.dat";
+	private const string _nameFile = "playerInfo.dat";
 	public string NameFile
 	{
 		get
@@ -35,7 +35,7 @@ public class QuestsManager : MonoBehaviour {
 		{
 			Instance = this;
 
-			Data = new DataQuests();
+			Instance.Data = new DataPlayer();
 		}
 	}
 }
