@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿/*
+*	Copyright (c) NromaGames
+*	Developer Sazonov Vladimir (Emilio) 
+*	Email : futureNroma@yandex.ru
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,71 +18,90 @@ public class ButtonClick : MonoBehaviour {
     public GameObject sectionAnimalsInShop;
     private Animals animals = new Animals();   
 
-    public void ClickLaterButton()
+	/// <summary>
+	/// Call when user click on later to rate application
+	/// in google play.
+	/// </summary>
+    public void ClickLaterRateButton()
     {
-        DataAd data = LoadSaveAd.Load();
-        data.ClicksOnRestartButton = 0;
-        LoadSaveAd.Save(data);
 
-        //hide rate window
+		AdManager.Instance.Data.ClicksOnRestartButton = 0;
+
+		// Save
+		LoadSave.Save(AdManager.Instance.Data, AdManager.Instance.NameFile);
+
+        // Hide rate window
         GameObject.Find("CanvasClassic").transform.
             Find("WindowRate").gameObject.SetActive(false);
     }
 
+	/// <summary>
+	/// Call when user click to rate application
+	/// in google play.
+	/// </summary>
     public void ClickRateButton()
     {
-        DataAd data = LoadSaveAd.Load();
-        data.ClicksOnRestartButton = 0;
-        data.IsRatedApp = true;
-        LoadSaveAd.Save(data);
 
-        //hide rate window
-        GameObject.Find("CanvasClassic").transform.
+		AdManager.Instance.Data.ClicksOnRestartButton = 0;
+		AdManager.Instance.Data.IsRatedApp = true;
+
+		// Save
+		LoadSave.Save(AdManager.Instance.Data, AdManager.Instance.NameFile);
+
+		// Hide rate window
+		GameObject.Find("CanvasClassic").transform.
             Find("WindowRate").gameObject.SetActive(false);
-        //open play market to rate my app
+        // Open play market to rate my app
         Application.OpenURL("market://details?id=com.Nroma.Catstrip");
     }
 
     /// <summary>
-    /// run game (for menu when click play button)
+    /// Call when user click on play button.
+	/// It's start a game.
     /// </summary>
     public void ClickPlayButton()
     {
-        screenFader = GetComponent<ScreenFader>();      
-        StartCoroutine(WaitTimeGoToSceneGame(screenFader));
-        
+        screenFader = GetComponent<ScreenFader>();   
+		// Open scene game
+        StartCoroutine(WaitTimeGoToSceneGame(screenFader));   
     }
 
+	/// <summary>
+	/// Call when click on shop button in menu
+	/// </summary>
     public void ClickShopButton()
     {
         GameObject.Find("CanvasClassic").transform.Find("WindowShop").gameObject.SetActive(true);
     }
-
-    public void ClickProfileButton()
+	/// <summary>
+	/// Call when click on profile button
+	/// </summary>
+	public void ClickProfileButton()
     {
         GameObject.Find("CanvasClassic").transform.Find("WindowProfile").gameObject.SetActive(true);
     }
-
-    public void ClickQuestsButton()
+	/// <summary>
+	/// Call when click on quest button in menu
+	/// </summary>
+	public void ClickQuestsButton()
     {
-        DataQuests dataQuests = new DataQuests();
-        dataQuests = LoadSaveQuests.Load();
 
-        //get button video rewarded
+        // Get button video rewarded
         GameObject buttonRewardVideo = GameObject.Find("CanvasClassic").transform.
             Find("WindowQuests").Find("ButtonRewardVideo").gameObject;
 
-        if (dataQuests.dateQuest != DateTime.Today)
+        if (QuestsManager.Instance.Data.DateQuest != DateTime.Today)
         {
-            dataQuests.SetDefoultData();
-            LoadSaveQuests.Save(dataQuests);
+			QuestsManager.Instance.Data.SetDefoultData();
+			LoadSave.Save(QuestsManager.Instance.Data, 
+				QuestsManager.Instance.NameFile);
         }
 
-        if(dataQuests.wasTodayRewardVideo)
+        if(QuestsManager.Instance.Data.WasTodayRewardVideo)
         {
             buttonRewardVideo.SetActive(false);
 
-            //show text that there are not rewarded
+            // Show text that there are not rewarded
             GameObject.Find("CanvasClassic").transform.
                 Find("WindowQuests").Find("NoGiftsText").gameObject.SetActive(true);
         }
@@ -88,28 +113,34 @@ public class ButtonClick : MonoBehaviour {
         GameObject.Find("CanvasClassic").transform.Find("WindowQuests").gameObject.SetActive(true);
     }
 
-    public void ClickMusicButton(GameObject buttonMusic)
+	/// <summary>
+	/// Call when click music button
+	/// </summary>
+	public void ClickMusicButton(GameObject buttonMusic)
     {
         Animals animals = new Animals();
-        DataPlayer dataPlayer = new DataPlayer();
-        dataPlayer = LoadSavePlayer.Load();
 
         if(buttonMusic.GetComponent<Toggle>().isOn == true)
         {
-            dataPlayer.IsMusicMainMenu = true;
+			DataplayerManager.Instance.Data.IsMusicMainMenu = true;
         }
         else
         {
-            dataPlayer.IsMusicMainMenu = false;
+			DataplayerManager.Instance.Data.IsMusicMainMenu = false;
         }
 
-        LoadSavePlayer.Save(dataPlayer);
+		LoadSave.Save(DataplayerManager.Instance.Data, DataplayerManager.Instance.NameFile);
 
-        BackgroundMenu.setValuesInStart(animals);
+        BackgroundMenu.SetValuesInStart(animals);
     }
 
-    //coroutin that make effect of shadow and after this start scene GameZone
-    private IEnumerator WaitTimeGoToSceneGame(ScreenFader screenFaderInCorutine)
+	/// <summary>
+	/// Coroutin that make effect of shadow 
+	/// and after this start scene GameZone
+	/// </summary>
+	/// <param name="screenFaderInCorutine"></param>
+	/// <returns></returns>
+	private IEnumerator WaitTimeGoToSceneGame(ScreenFader screenFaderInCorutine)
     {
         screenFaderInCorutine.fadeSpeed = 2f;
         screenFaderInCorutine.fadeState = ScreenFader.FadeState.In;
@@ -118,19 +149,27 @@ public class ButtonClick : MonoBehaviour {
         SceneManager.LoadScene("GameZone");
     }
 
-    //click restart game when game over to start new game
-    public void Restart()
+	/// <summary>
+	/// Call when click restart game button
+	/// when game over, to start new game.
+	/// </summary>
+	public void Restart()
     {
-        DataAd dataAd = LoadSaveAd.Load();
-        if (!dataAd.IsRatedApp)
+
+        if (!AdManager.Instance.Data.IsRatedApp)
         {
-            dataAd.ClicksOnRestartButton++;
-            LoadSaveAd.Save(dataAd);
+			AdManager.Instance.Data.ClicksOnRestartButton++;
+			LoadSave.Save(AdManager.Instance.Data, 
+				AdManager.Instance.NameFile);
         }
 
         SceneManager.LoadScene("GameZone");
     }
 
+	/// <summary>
+	/// Call when click on button No on pause window.
+	/// Continue the game.
+	/// </summary>
     public void PauseNo()
     {
         GameObject.Find("PauseWindow").SetActive(false);
@@ -140,20 +179,30 @@ public class ButtonClick : MonoBehaviour {
         Time.timeScale = 1;
     }
 
-    public void PauseYes()
+	/// <summary>
+	/// Call when click on button Yes on pause window.
+	/// Out of the application.
+	/// </summary>
+	public void PauseYes()
     {
         Application.Quit();
     }
 
-    public void PauseReturnToMenu()
+	/// <summary>
+	/// Call when click on button Return To Menu on pause window.
+	/// Return to main menu.
+	/// </summary>
+	public void PauseReturnToMenu()
     {
         Time.timeScale = 1;
 
         SceneManager.LoadScene("MainMenu");
     }
 
-    //show message that sat that this feature will be coming soon (only in main menu)
-    public void msgComingSoon()
+	/// <summary>
+	/// Show message that sat that this feature will be coming soon (only in main menu work!)
+	/// </summary>
+	public void ShowMsgComingSoon()
     {
         GameObject.Find("CanvasClassic").transform.Find("ComingSoon").gameObject.SetActive(true);
         StartCoroutine(Wait(1, () => {
@@ -161,7 +210,10 @@ public class ButtonClick : MonoBehaviour {
         }));
     }
 
-    public void msgInformation()
+	/// <summary>
+	/// Show information window (only in main menu work!)
+	/// </summary>
+	public void ShowMsgInformation()
     {
         GameObject.Find("CanvasClassic").transform.Find("WindowInformation").gameObject.SetActive(true);
         StartCoroutine(Wait(2, () => {
@@ -170,56 +222,62 @@ public class ButtonClick : MonoBehaviour {
     }
 
     /// <summary>
-    /// return to main menu after shop
+    /// Hide shop window.
     /// </summary>
-    public void ExitShop()
+    public void HideShop()
     {
         GameObject.Find("CanvasClassic").transform.Find("WindowShop").gameObject.SetActive(false);
     }
 
     /// <summary>
-    /// return to main menu after profile
+    /// Hide profile window
     /// </summary>
-    public void ExitProfile()
+    public void HideProfile()
     {
         GameObject.Find("CanvasClassic").transform.Find("WindowProfile").gameObject.SetActive(false);
     }
 
-    public void ExitQuests()
+	/// <summary>
+	/// Hide quests window
+	/// </summary>
+	public void HideQuests()
     {
         GameObject.Find("CanvasClassic").transform.Find("WindowQuests").gameObject.SetActive(false);
     }
 
-    public void ExitPanelQuests()
+	/// <summary>
+	/// Hide panel quests
+	/// </summary>
+	public void HideBlackPanelQuests()
     {
         GameObject.Find("CanvasClassic").transform.Find("WindowQuests").
             Find("PanelBlack").gameObject.SetActive(false);
     }
     /// <summary>
-    /// function starts work when toggle send signal
+    /// Call toggle send signal in shop
     /// </summary>
     /// <param name="i">say witch animals sent a signal</param>
     public void ToggleAnimalInShop(int i)
     {       
-        //get an animal in shop
+        // Get an animal in shop
         GameObject anAnimal = GameObject.Find("CanvasClassic").transform.Find("WindowShop").
             Find("SectionAnimals").Find(i.ToString()).gameObject;
 
-        //hide buy button
+        // Hide buy button
         GameObject.Find("CanvasClassic").transform.Find("WindowShop").
             Find("SectionAnimals").Find("BuyButton").gameObject.SetActive(false);
 
-        //get component toggle of an animal
+        // Get component toggle of an animal
         Toggle toggle = anAnimal.GetComponent<Toggle>();
         
         if (toggle.isOn)
         {
             toggle.interactable = false;
 
-            //costumer can buy the animal
+            // Costumer can buy the animal
             if (animals.CostAnimals[i] <= DataplayerManager.Instance.Data.Coins)
             {
-                //show buy button
+                // Show buy button
                 GameObject.Find("CanvasClassic").transform.Find("WindowShop").
             Find("SectionAnimals").Find("BuyButton").gameObject.SetActive(true);
             }
@@ -227,42 +285,37 @@ public class ButtonClick : MonoBehaviour {
         }
         else if (!DataplayerManager.Instance.Data.BoughtAnimals.Contains(i))
         {
-            //do that can't click on toggle
+            // Do that can't click on toggle
             toggle.interactable = true;
         }
-
-        
-
     }
 
     /// <summary>
-    /// doing monipulations when buy button was clicked
+    /// Call when clicked on buy button.
     /// </summary>
     public void BuyButton()
     {
         for (int i = 0; i != 3; i++)
         {
-            //find an animal
+            // Find an animal
             GameObject anAnimal = GameObject.Find("CanvasClassic").transform.Find("WindowShop").
             Find("SectionAnimals").Find(i.ToString()).gameObject;
 
-            //check witch an animal costumer want to buy
+            // Check witch an animal costumer want to buy
             if (anAnimal.GetComponent<Toggle>().isOn)
             {
                 DataplayerManager.Instance.Data.Coins -= animals.CostAnimals[i];
-                //add animal to bought animal list
+                // Add animal to bought animal list
                 DataplayerManager.Instance.Data.BoughtAnimals.Add(i);
-                //add to current animal
+                // Add to current animal
                 DataplayerManager.Instance.Data.CurrentAnimal = i;
 
-				//save data
-				//LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
-				IData instance;
-				instance = DataplayerManager.Instance.Data;
-                LoadSave.Save(instance, DataplayerManager.Instance.NameFile);
+				// Save data
+                LoadSave.Save(DataplayerManager.Instance.Data,
+					DataplayerManager.Instance.NameFile);
 
-                //update menu values
-                BackgroundMenu.setValuesInStart(animals);
+                // Update menu values
+                BackgroundMenu.SetValuesInStart(animals);
 
                 GameObject.Find("CanvasClassic").transform.Find("WindowShop").
             Find("SectionAnimals").Find("BuyButton").gameObject.SetActive(false);
@@ -272,41 +325,40 @@ public class ButtonClick : MonoBehaviour {
     }
 
     /// <summary>
-    /// 
+    /// Call when user choosed animal to play with it
+	/// on profile window (choose from bought animals).
     /// </summary>
-    /// <param name="i">id of animal</param>
+    /// <param name="i">Id of animal</param>
     public void ToggleAnimalInProfile(int i)
     {
-        //find an animal in canvas classic
+        // Find an animal in canvas classic
         GameObject anAnimal = GameObject.Find("CanvasClassic").transform.Find("WindowProfile").
         Find("SectionAnimals").Find(i.ToString()).gameObject;
 
-        //get toggle component of animal
+        // Get toggle component of animal
         Toggle toggle = anAnimal.GetComponent<Toggle>();
 
         if (toggle.isOn)
         {
-            //for can't click
+            // Set for user unclickable on current animal (he choosed it).
             toggle.interactable = false;
 
-            //show vi
-            anAnimal.transform.Find("Vi").gameObject.SetActive(true);
+			// Show vi on animal that choosed
+			anAnimal.transform.Find("Vi").gameObject.SetActive(true);
 
-            //set new current animal
+            // Set new current animal
             DataplayerManager.Instance.Data.CurrentAnimal = i;
-			//save data
-			//LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
-			IData instance;
-			instance = DataplayerManager.Instance.Data;
-			LoadSave.Save(instance, DataplayerManager.Instance.NameFile);
-
+			
+			// Save data.
+			LoadSave.Save(DataplayerManager.Instance.Data,
+				DataplayerManager.Instance.NameFile);
 		}
         else
         {
-            //hide vi
-            anAnimal.transform.Find("Vi").gameObject.SetActive(false);
-            //for can click
-            toggle.interactable = true;
+			// Hide vi from animal that didnt choosed.
+			anAnimal.transform.Find("Vi").gameObject.SetActive(false);
+			// Set for user clickable on animal that didnt choosed.
+			toggle.interactable = true;
         }
     }
         
@@ -316,47 +368,40 @@ public class ButtonClick : MonoBehaviour {
     {
         DataplayerManager.Instance.Data.Coins += 1000;
 		//LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
-		IData instance;
-		instance = DataplayerManager.Instance.Data;
-		LoadSave.Save(instance, DataplayerManager.Instance.NameFile);
+		LoadSave.Save(DataplayerManager.Instance.Data, DataplayerManager.Instance.NameFile);
 		//update menu
-		BackgroundMenu.setValuesInStart(animals);
+		BackgroundMenu.SetValuesInStart(animals);
     }
 
+	/// <summary>
+	/// Set default data
+	/// </summary>
     public void DefDat()
     {
-        DataplayerManager.Instance.Data.SetDefoultData();
-		//LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
-		IData instance;
-		instance = DataplayerManager.Instance.Data;
-		LoadSave.Save(instance, DataplayerManager.Instance.NameFile);
+		DataplayerManager.Instance.Data.SetDefoultData();
+		LoadSave.Save(DataplayerManager.Instance.Data, 
+			DataplayerManager.Instance.NameFile);
 
-		DataQuests data = LoadSaveQuests.Load();
-        data.SetDefoultData();
-        LoadSaveQuests.Save(data);
+		QuestsManager.Instance.Data.SetDefoultData();
+		LoadSave.Save(QuestsManager.Instance.Data, 
+			QuestsManager.Instance.NameFile);
 
-        DataAd dataAd = LoadSaveAd.Load();
-        dataAd.SetDefoultData();
-        LoadSaveAd.Save(dataAd);
+		AdManager.Instance.Data.SetDefoultData();
+		LoadSave.Save(AdManager.Instance.Data, AdManager.Instance.NameFile);
 
-        //update menu
-        BackgroundMenu.setValuesInStart(animals);
-
-
+        //Update menu
+        BackgroundMenu.SetValuesInStart(animals);
     }
     #endregion
 
+    delegate void SomeMethod();
     /// <summary>
-    /// the delegate for send method like param in another method
-    /// </summary>
-    delegate void someMethod();
-    /// <summary>
-    /// wait some time before start some method
+    /// Wait some time before start some method
     /// </summary>
     /// <param name="seconds"></param>
     /// <param name="method"></param>
     /// <returns></returns>
-    IEnumerator Wait(float seconds, someMethod method)
+    IEnumerator Wait(float seconds, SomeMethod method)
     {
         yield return new WaitForSeconds(seconds);
         method();

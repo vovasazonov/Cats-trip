@@ -4,10 +4,9 @@
 *	Email : futureNroma@yandex.ru
 */
 
-public interface IData
+public enum SideArea
 {
-	/// <summary>
-	/// Set defoult data;
-	/// </summary>
-	void SetDefoultData();
+	Left = 1,
+	Right = 2,
+	Center = 3
 }

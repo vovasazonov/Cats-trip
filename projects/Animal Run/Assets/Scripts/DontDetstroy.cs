@@ -6,12 +6,12 @@
 using UnityEngine;
 
 /// <summary>
-/// Don't destroy object.
+/// Don't destroy game object.
 /// </summary>
 public class DontDetstroy : MonoBehaviour {
 
 	#region Variables
-	public static DontDetstroy instance;
+	private static DontDetstroy _instance;
 	#endregion
 
 	#region Unity Methods
@@ -22,13 +22,13 @@ public class DontDetstroy : MonoBehaviour {
 	void Awake()
 	{
 		// There are not object yet.
-		if (instance == null)
+		if (_instance == null)
 		{
-			instance = this;
+			_instance = this;
 		}
 		// There are object that exist.
 		// Delete this object.
-		else if (instance != this)
+		else if (_instance != this)
 		{
 			Destroy(gameObject);
 		}

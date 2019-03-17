@@ -1,4 +1,10 @@
-﻿[System.Serializable]
+﻿/*
+*	Copyright (c) NromaGames
+*	Developer Sazonov Vladimir (Emilio) 
+*	Email : futureNroma@yandex.ru
+*/
+
+[System.Serializable]
 public class LocalizationData
 {
     public LocalizationItem[] items;

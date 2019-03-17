@@ -1,18 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*
+*	Copyright (c) NromaGames
+*	Developer Sazonov Vladimir (Emilio) 
+*	Email : futureNroma@yandex.ru
+*/
+
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Attach this script to text component.
+/// It translate the language in depences 
+/// of langueage in settings.
+/// </summary>
 public class LocalizedText : MonoBehaviour
 {
-
     public string key;
 
-    // Use this for initialization
     void Start()
     {
         Text text = GetComponent<Text>();
-        text.text = LocalizationManager.instance.GetLocalizedValue(key);
+        text.text = LocalizationManager.Instance.GetLocalizedValue(key);
     }
-
 }
