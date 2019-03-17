@@ -121,7 +121,7 @@ public class LocalizationManager : MonoBehaviour
 	/// <param name="fileName"></param>
 	public void SetLanguage (string fileName)
 	{
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		StartCoroutine("LoadLocalizedTextOnAndroid", fileName);
 #elif UNITY_EDITOR
 		LoadLocalizedText(fileName);
