@@ -18,16 +18,26 @@ public class OnAnotherCollider : MonoBehaviour {
 		// Player touched money in game.
         if (collision.tag == "Coin")
         {
+			CoinSettins coinSettins = collision.GetComponent<CoinSettins>();
+
+			if (CoinSettins.CollectCoin != null)
+			{
+				// Call event when collect coin.
+				CoinSettins.CollectCoin.Invoke(coinSettins);
+			}
+
 			// Hide money
-            collision.GetComponent<SpriteRenderer>().enabled = false;
+			collision.GetComponent<SpriteRenderer>().enabled = false;
 
 			// Add money to player's wallet. :)
-            if (collision.name == "CoinGold(Clone)")
-                RunGame.CountMoney += 3;
-            else if (collision.name == "CoinSliver(Clone)")
-                RunGame.CountMoney++;
+            RunGame.CountMoney += coinSettins.Cost;
         }
-        else
+		if (collision.tag == "Bonus")
+		{
+			// Set bonus as child of player.
+			collision.transform.SetParent(transform);
+		}
+		else
         {
             RunGame.IsGameOver = true;
         }
