@@ -10,6 +10,12 @@
 
 #### 1.4. Макеты интерфейса
 ![Главное меню игры](https://pp.userapi.com/c845417/v845417121/1db21c/Y3So9ya6kUA.jpg)
+![Процесс игры](https://pp.userapi.com/c845417/v845417121/1db249/Xb96qBFNmcA.jpg)
+![Результат игры](https://pp.userapi.com/c845417/v845417121/1db22d/-BFk6XWf-H8.jpg)
+![Магазин персонажей](https://pp.userapi.com/c845417/v845417121/1db23b/xP3_FTCn79E.jpg)
+![Коллекция купленых персонажей](https://pp.userapi.com/c845417/v845417121/1db242/gjYPwf_blqc.jpg)
+![](https://pp.userapi.com/c845417/v845417121/1db234/C_7X2fb2u0M.jpg)
+
 #### 1.5. Описание хранимых данных
 
 2. Используемые СУБД
