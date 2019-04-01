@@ -91,7 +91,7 @@ Cats-trip - мобильная игра в жанре раннер для Androi
 
 ## 3. ER - диаграмма
 -------------
-
+![ER диаграмма](https://github.com/vovasazonov/Cats-trip/blob/develop/ER%20-%20%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0.png?raw=true)
 ## 4. Основные операции с БД
 -------------
 Основные операции с базами данных в SQL включают: 
