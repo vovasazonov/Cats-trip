@@ -20,18 +20,19 @@ static public class LoadSave {
 	/// </summary>
 	static public void Save<T>(T Data, string nameFile) where T : IData
 	{
-		BinaryFormatter bf = new BinaryFormatter();
 
-		// Check if folder "saves" exists.
-		if (!Directory.Exists(Application.persistentDataPath + "/saves"))
-			Directory.CreateDirectory(Application.persistentDataPath + "/saves");
+			BinaryFormatter bf = new BinaryFormatter();
 
-		// Create new file.
-		FileStream file = new FileStream(Application.persistentDataPath +
-			"/saves/"+ nameFile, FileMode.Create);
+			// Check if folder "saves" exists.
+			if (!Directory.Exists(Application.persistentDataPath + "/saves"))
+				Directory.CreateDirectory(Application.persistentDataPath + "/saves");
 
-		bf.Serialize(file, Data);
-		file.Close();
+			// Create new file.
+			FileStream file = new FileStream(Application.persistentDataPath +
+				"/saves/"+ nameFile, FileMode.Create);
+
+			bf.Serialize(file, Data);
+			file.Close();
 	}
 
 	/// <summary>
@@ -44,41 +45,53 @@ static public class LoadSave {
 	/// <returns>Is loaded</returns>
 	static public void Load<T>(ref T Data, string nameFile) where T : IData
 	{
-		// Check if folder "saves" exists.
-		if (File.Exists(Application.persistentDataPath + "/saves/"+ nameFile))
-		{
-			BinaryFormatter bf = new BinaryFormatter();
-
-			FileStream file = File.Open(Application.persistentDataPath + "/saves/"+ 
-				nameFile, FileMode.Open);
-
-			try
+			// Check if folder "saves" exists.
+			if (File.Exists(Application.persistentDataPath + "/saves/"+ nameFile))
 			{
-				// Load data.
-				Data = (T)bf.Deserialize(file);
-				file.Close();
+				BinaryFormatter bf = new BinaryFormatter();
+
+				FileStream file = File.Open(Application.persistentDataPath + "/saves/"+ 
+					nameFile, FileMode.Open);
+
+				try
+				{
+					// Load data.
+					Data = (T)bf.Deserialize(file);
+					file.Close();
+				}
+				catch (Exception e)
+				{
+					Debug.Log(e.Message);
+
+					// Close file
+					file.Close();
+
+					// Set defoult values
+					Data.SetDefoultData();
+
+					// Save new data
+					Save(Data, nameFile);
+				}
 			}
-			catch (Exception e)
+			else
 			{
-				Debug.Log(e.Message);
-
-				// Close file
-				file.Close();
-
 				// Set defoult values
 				Data.SetDefoultData();
 
 				// Save new data
 				Save(Data, nameFile);
 			}
-		}
-		else
-		{
-			// Set defoult values
-			Data.SetDefoultData();
-
-			// Save new data
-			Save(Data, nameFile);
-		}
 	}
+
+	// ------------------------- load save to data base --------------------------
+	static public void Load(ref DataPlayer Data)
+	{
+		Data = Server.Database.LoadData();
+	}
+
+	static public void Save(DataPlayer Data)
+	{
+		Server.Database.SaveData(Data);
+	}
+	// ------------------------- ---------------------- --------------------------
 }

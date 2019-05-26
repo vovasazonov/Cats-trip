@@ -14,7 +14,7 @@ using UnityEngine;
 public class DataplayerManager : MonoBehaviour {
 
 	#region Variables
-    public static DataplayerManager Instance;
+	public static DataplayerManager Instance;
 
 	// Data that keeping information.
 	public DataPlayer Data { get; set; }

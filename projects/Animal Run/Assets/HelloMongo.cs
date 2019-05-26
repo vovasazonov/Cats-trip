@@ -199,7 +199,6 @@ public class HelloMongo : MonoBehaviour {
 		 */
 
 
-
 		playercollection.Remove(Query.EQ("name", "Vati"));
 		Debug.Log ("11. DELETE DOC WHERE (vati)");
 

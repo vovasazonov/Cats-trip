@@ -36,7 +36,7 @@ public class StartupManager : MonoBehaviour
 			DataAd dataAd = new DataAd();
 
 			// Load DataPlayer
-			LoadSave.Load(ref dataPlayer, DataplayerManager.Instance.NameFile);
+			LoadSave.Load(ref dataPlayer);//, DataplayerManager.Instance.NameFile,true);
 			DataplayerManager.Instance.Data = dataPlayer;
 			// Load AdData
 			LoadSave.Load(ref dataAd, AdManager.Instance.NameFile);

@@ -96,7 +96,7 @@ public class DataPlayer : IData{
 	/// </summary>
 	public void SetDefoultData()
     {
-        IsMusicMainMenu = true;
+        //IsMusicMainMenu = true;
         Score = 0;
         Coins = 0;
         CurrentAnimal = (int)Animal.GrayCat;

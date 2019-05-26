@@ -101,14 +101,14 @@ public class RunGame : MonoBehaviour {
         InputAreasListsToGeneralList();
 
         // Set music
-        if (DataplayerManager.Instance.Data.IsMusicMainMenu)
-        {
-            GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = true;
-        }
-        else
-        {
-            GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = false;
-        }
+        //if (DataplayerManager.Instance.Data.IsMusicMainMenu)
+        //{
+        //    GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = true;
+        //}
+        //else
+        //{
+        //    GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = false;
+        //}
 
 		// Set false that saying the last pieces 
 		// are not deleting yet.
@@ -556,7 +556,7 @@ public class RunGame : MonoBehaviour {
     public void SaveNewData()
     {
 		// Save data.
-		LoadSave.Save(_temporaryDataPlayer, DataplayerManager.Instance.NameFile);
+		LoadSave.Save(_temporaryDataPlayer);//, DataplayerManager.Instance.NameFile,true);
 
 		// Clone data to static class of data.
 		DataplayerManager.Instance.Data = (DataPlayer)_temporaryDataPlayer.Clone();
