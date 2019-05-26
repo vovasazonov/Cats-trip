@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 /// <summary>
 /// Data about dataplayer interaction
