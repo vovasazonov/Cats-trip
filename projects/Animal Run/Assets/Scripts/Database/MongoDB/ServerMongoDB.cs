@@ -23,6 +23,8 @@ public class ServerMongoDB : MonoBehaviour, IDatabaseable
 
 	public DataPlayer LoadData()
 	{
+		CheckDatabase();
+
 		DataPlayer data = new DataPlayer();
 
 		data.BoughtAnimals = GetBoughtAnimals();
@@ -42,16 +44,58 @@ public class ServerMongoDB : MonoBehaviour, IDatabaseable
 
 	public void SaveData(DataPlayer data)
 	{
-		//data.BoughtAnimals
-		SetBoughtAnimals(data);
+		CheckDatabase();
+
+		if(data.BoughtAnimals != null)
+		{
+			//data.BoughtAnimals
+			SetBoughtAnimals(data);
+			SetCurrentAnimal(data);
+		}
 
 		//data.Coins
 		SetCoins(data);
 
-		SetCurrentAnimal(data);
-
 		//data.Score
 		SetScore(data);
+	}
+
+	/// <summary>
+	/// Check if the values in database are contains and they are correct.
+	/// </summary>
+	private void CheckDatabase()
+	{
+		// Check if there are bought animal
+		var animalInUserCollection = _database.GetCollection<BsonDocument>("ANIMAL_IN_USER");
+		var userCollection = _database.GetCollection<BsonDocument>("USER");
+		ObjectId idUser = userCollection.FindOne()["_id"].AsObjectId;
+		if (animalInUserCollection.Count() == 0)
+		{
+			Animal animalString = (Animal)0;
+			var an = _database.GetCollection<BsonDocument>("ANIMALS").
+				Find(new QueryDocument("name", animalString.ToString()));
+			ObjectId idAnimal = new ObjectId();
+			foreach (var document in an)
+			{
+				idAnimal = document["_id"].AsObjectId;
+			}
+
+			animalInUserCollection.Insert(new BsonDocument
+			{
+				{ "animal_id", idAnimal },
+				{ "user_id",  idUser},
+				{ "current", true }
+			});
+		}
+
+		// Check if there are current animal
+		if(GetCurrentAnimal() == -1)
+		{
+			DataPlayer data = new DataPlayer();
+			data.SetDefoultData();
+			SetCurrentAnimal(data);
+		}
+
 	}
 
 	private void SetCurrentAnimal(DataPlayer data)
@@ -75,7 +119,7 @@ public class ServerMongoDB : MonoBehaviour, IDatabaseable
 		ObjectId id = new ObjectId();
 		foreach (var document in currentAnimal)
 		{
-			id = document["animal_id"].AsObjectId;
+			id = document["_id"].AsObjectId;
 		}
 
 		var where5 = new QueryDocument{
@@ -89,6 +133,8 @@ public class ServerMongoDB : MonoBehaviour, IDatabaseable
 
 	private void SetBoughtAnimals(DataPlayer data)
 	{
+		CheckDatabase();
+
 		int current = GetCurrentAnimal();
 		var userAnimalCollection = _database.GetCollection<BsonDocument>("ANIMAL_IN_USER");
 
@@ -124,35 +170,6 @@ public class ServerMongoDB : MonoBehaviour, IDatabaseable
 		});
 
 		}
-
-		//var userCollection = _database.GetCollection<BsonDocument>("USER");
-
-		//var where14 = new QueryDocument{
-		//	{"_id", userCollection.FindOne()["_id"]}
-		//};
-		//var set14 = new UpdateDocument {
-		//	{ "$set", new BsonDocument ("money", data.Coins) }
-		//};
-		//userCollection.Update(where14, set14);
-
-
-		//List<int> boughtAnimals = new List<int>();
-
-		//var animals = _database.GetCollection<BsonDocument>("ANIMAL_IN_USER").FindAll();
-		//ObjectId id = new ObjectId();
-		//foreach (var document in animals)
-		//{
-		//	id = document["animal_id"].AsObjectId;
-		//	var animal = _database.GetCollection<BsonDocument>("ANIMALS").
-		//	Find(new QueryDocument("_id", id));
-		//	string nameAnimal = "";
-		//	foreach (var item in animal)
-		//	{
-		//		nameAnimal = item["name"].AsString;
-		//	}
-		//	Debug.Log(nameAnimal);
-		//	boughtAnimals.Add((int)Enum.Parse(typeof(Animal), nameAnimal));
-		//}
 	}
 
 	private void SetCoins(DataPlayer data)
@@ -176,7 +193,7 @@ public class ServerMongoDB : MonoBehaviour, IDatabaseable
 			{"_id", userCollection.FindOne()["_id"]}
 		};
 		var set14 = new UpdateDocument {
-			{ "$set", new BsonDocument ("score", data.Coins) }
+			{ "$set", new BsonDocument ("score", data.Score) }
 		};
 		userCollection.Update(where14, set14);
 	}
@@ -230,6 +247,11 @@ public class ServerMongoDB : MonoBehaviour, IDatabaseable
 			nameAnimal = item["name"].AsString;
 		}
 		Debug.Log(nameAnimal);
+		if (nameAnimal == "")
+		{
+			// return error
+			return -1;
+		}
 		return (int)Enum.Parse(typeof(Animal), nameAnimal);
 	}
 
