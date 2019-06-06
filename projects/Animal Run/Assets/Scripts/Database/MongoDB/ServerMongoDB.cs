@@ -257,6 +257,7 @@ public class ServerMongoDB : MonoBehaviour, IDatabaseable
 
 	private int GetScore()
 	{
+		//
 		return _database.GetCollection<BsonDocument>("USER").
 			FindOne()["score"].AsInt32;
 	}
