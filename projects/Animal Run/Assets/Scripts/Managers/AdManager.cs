@@ -330,8 +330,9 @@ public class AdManager : MonoBehaviour {
 
 			DataplayerManager.Instance.Data.Coins += (int)e.Amount;
 
-			LoadSave.Save(DataplayerManager.Instance.Data,
-				DataplayerManager.Instance.NameFile);
+			LoadSave.Save(DataplayerManager.Instance.Data);//,
+				//DataplayerManager.Instance.NameFile,
+				//true);
 
 			// Update menu 
 			Animals animals = new Animals();

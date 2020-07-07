@@ -120,16 +120,16 @@ public class ButtonClick : MonoBehaviour {
     {
         Animals animals = new Animals();
 
-        if(buttonMusic.GetComponent<Toggle>().isOn == true)
-        {
-			DataplayerManager.Instance.Data.IsMusicMainMenu = true;
-        }
-        else
-        {
-			DataplayerManager.Instance.Data.IsMusicMainMenu = false;
-        }
+		//     if(buttonMusic.GetComponent<Toggle>().isOn == true)
+		//     {
+		//DataplayerManager.Instance.Data.IsMusicMainMenu = true;
+		//     }
+		//     else
+		//     {
+		//DataplayerManager.Instance.Data.IsMusicMainMenu = false;
+		//     }
 
-		LoadSave.Save(DataplayerManager.Instance.Data, DataplayerManager.Instance.NameFile);
+		LoadSave.Save(DataplayerManager.Instance.Data);//, DataplayerManager.Instance.NameFile, true);
 
         BackgroundMenu.SetValuesInStart(animals);
     }
@@ -311,8 +311,9 @@ public class ButtonClick : MonoBehaviour {
                 DataplayerManager.Instance.Data.CurrentAnimal = i;
 
 				// Save data
-                LoadSave.Save(DataplayerManager.Instance.Data,
-					DataplayerManager.Instance.NameFile);
+				LoadSave.Save(DataplayerManager.Instance.Data);//,
+					//DataplayerManager.Instance.NameFile,
+					//true);
 
                 // Update menu values
                 BackgroundMenu.SetValuesInStart(animals);
@@ -348,10 +349,11 @@ public class ButtonClick : MonoBehaviour {
 
             // Set new current animal
             DataplayerManager.Instance.Data.CurrentAnimal = i;
-			
+
 			// Save data.
-			LoadSave.Save(DataplayerManager.Instance.Data,
-				DataplayerManager.Instance.NameFile);
+			LoadSave.Save(DataplayerManager.Instance.Data);//,
+				//DataplayerManager.Instance.NameFile,
+				//true);
 		}
         else
         {
@@ -368,7 +370,7 @@ public class ButtonClick : MonoBehaviour {
     {
         DataplayerManager.Instance.Data.Coins += 1000;
 		//LoadSavePlayer.Save(BackgroundMenu.dataPlayer);
-		LoadSave.Save(DataplayerManager.Instance.Data, DataplayerManager.Instance.NameFile);
+		LoadSave.Save(DataplayerManager.Instance.Data);//, DataplayerManager.Instance.NameFile,true);
 		//update menu
 		BackgroundMenu.SetValuesInStart(animals);
     }
@@ -379,8 +381,8 @@ public class ButtonClick : MonoBehaviour {
     public void DefDat()
     {
 		DataplayerManager.Instance.Data.SetDefoultData();
-		LoadSave.Save(DataplayerManager.Instance.Data, 
-			DataplayerManager.Instance.NameFile);
+		LoadSave.Save(DataplayerManager.Instance.Data);//, 
+			//DataplayerManager.Instance.NameFile, true);
 
 		QuestsManager.Instance.Data.SetDefoultData();
 		LoadSave.Save(QuestsManager.Instance.Data, 

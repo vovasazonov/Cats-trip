@@ -393,27 +393,28 @@ public class BackgroundMenu : MonoBehaviour {
 			DataplayerManager.Instance.Data.CurrentAnimal = (int)Animal.GrayCat;
 
 			// Save information
-			LoadSave.Save(DataplayerManager.Instance.Data, 
-				DataplayerManager.Instance.NameFile);
+			LoadSave.Save(DataplayerManager.Instance.Data);//, 
+				//DataplayerManager.Instance.NameFile,
+				//true);
         }
         
         // Set the best score in block in main menu
         GameObject.Find("TextScoreNum").GetComponent<Text>().text =
 			DataplayerManager.Instance.Data.Score.ToString();
 
-        // Set music
-        if (DataplayerManager.Instance.Data.IsMusicMainMenu)
-        {
-            GameObject.Find("CanvasClassic").transform.Find("ButtonMusic").gameObject.
-            GetComponent<Toggle>().isOn = true;
-            GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = true;
-        }
-        else
-        {
-            GameObject.Find("CanvasClassic").transform.Find("ButtonMusic").gameObject.
-            GetComponent<Toggle>().isOn = false;
-            GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = false;
-        }
+        //// Set music
+        //if (DataplayerManager.Instance.Data.IsMusicMainMenu)
+        //{
+        //    GameObject.Find("CanvasClassic").transform.Find("ButtonMusic").gameObject.
+        //    GetComponent<Toggle>().isOn = true;
+        //    GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = true;
+        //}
+        //else
+        //{
+        //    GameObject.Find("CanvasClassic").transform.Find("ButtonMusic").gameObject.
+        //    GetComponent<Toggle>().isOn = false;
+        //    GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = false;
+        //}
 
         #region set values in shop
         // Set count of money in block in shop
