@@ -36,15 +36,10 @@ public class AdManager : MonoBehaviour {
 
 	#region values of ads
 	// Identify of ads admob
-	// For test banner use "ca-app-pub-3940256099942544/6300978111"
-	// For production banner use "ca-app-pub-3742889557707024/4531467068";
-	private const string _bannerCode1 = "ca-app-pub-3940256099942544/6300978111";
-    // For test InterstitialAd use "ca-app-pub-3940256099942544/1033173712"
-    // For production InterstitialAd use "ca-app-pub-3742889557707024/5999222670"
-    private const string _fullAdWinCode = "ca-app-pub-3940256099942544/1033173712";
-    // For test video ad use "ca-app-pub-3940256099942544/5224354917"
-    // For production video ad use "ca-app-pub-3742889557707024/3367322884"
-    private const string _videoAdCode = "ca-app-pub-3940256099942544/5224354917";
+
+	private const string _bannerCode1 = "";
+    	private const string _fullAdWinCode = "";
+    	private const string _videoAdCode = "";
 
 	private InterstitialAd _fullWinAd;
 	private BannerView _bannerAd;
@@ -165,7 +160,7 @@ public class AdManager : MonoBehaviour {
     {
 		// For ad before load ad
 #if UNITY_ANDROID && !UNITY_EDITOR
-        string appId = "ca-app-pub-3742889557707024~9490906439";
+        string appId = "c";
 #elif UNITY_IPHONE && !UNITY_EDITOR
         string appId = "unexpected_platform";
 #elif UNITY_EDITOR
